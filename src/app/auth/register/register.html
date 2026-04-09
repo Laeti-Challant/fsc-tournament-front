@@ -1,0 +1,71 @@
+@if (isOpen()) {
+  <div class="modal modal-open">
+    <div class="modal-box bg-base-200 shadow-fsc">
+      <h3 class="font-bold text-lg text-center mb-4">Créer un compte</h3>
+
+      @if (errorMessage()) {
+        <div class="alert alert-error mb-4">
+          <span>{{ errorMessage() }}</span>
+        </div>
+      }
+
+      <div class="grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-x-4 gap-y-3">
+        <label class="text-sm font-medium">Email</label>
+        <input
+          type="email"
+          placeholder="ton@email.com"
+          class="input bg-base-100 w-full"
+          [(ngModel)]="formData.email"
+          name="email"
+        />
+
+        <label class="text-sm font-medium">Pseudo</label>
+        <input
+          type="text"
+          placeholder="TonPseudo"
+          class="input bg-base-100 w-full"
+          [(ngModel)]="formData.pseudo"
+          name="pseudo"
+        />
+
+        <label class="text-sm font-medium">Mot de passe</label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          class="input bg-base-100 w-full"
+          [(ngModel)]="formData.password"
+          name="password"
+        />
+
+        <label class="text-sm font-medium">Confirmer le mot de passe</label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          class="input bg-base-100 w-full"
+          [ngModel]="confirmPassword()"
+          (ngModelChange)="confirmPassword.set($event)"
+          name="confirmPassword"
+        />
+      </div>
+
+      <div class="modal-action flex-col gap-2">
+        <button class="btn btn-primary w-full" (click)="submit()" [disabled]="isLoading()">
+          @if (isLoading()) {
+            <span class="loading loading-spinner loading-sm"></span>
+          } @else {
+            Créer mon compte
+          }
+        </button>
+
+        <p class="text-center text-sm">
+          Déjà un compte ?
+          <button class="link link-primary" (click)="switchToLogin()">Se connecter</button>
+        </p>
+
+        <button class="btn btn-ghost btn-sm" (click)="close()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" (click)="close()"></div>
+  </div>
+}

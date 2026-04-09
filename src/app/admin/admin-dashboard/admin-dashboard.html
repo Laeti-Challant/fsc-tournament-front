@@ -1,0 +1,101 @@
+<div class="p-6">
+  <h1 class="text-2xl font-bold mb-8">Tableau de bord</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Carte Utilisateurs -->
+    <a
+      routerLink="/admin/users"
+      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+    >
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="card-title text-lg">Utilisateurs</h2>
+          <span class="text-3xl">👥</span>
+        </div>
+
+        @if (isLoading()) {
+          <span class="loading loading-spinner loading-sm text-primary"></span>
+        } @else if (totalUsers() !== null) {
+          <p class="text-4xl font-bold text-primary">{{ totalUsers() }}</p>
+          <p class="text-neutral-content text-sm">utilisateurs inscrits</p>
+        } @else {
+          <p class="text-neutral-content text-sm">Données indisponibles</p>
+        }
+
+        <div class="card-actions justify-end mt-4">
+          <span class="text-primary text-sm">Gérer →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Carte Événement (TODO) -->
+    <div class="card bg-base-200 opacity-50 cursor-not-allowed">
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="card-title text-lg">Événement</h2>
+          <span class="text-3xl">🏆</span>
+        </div>
+        <p class="text-neutral-content text-sm">Disponible prochainement</p>
+        <div class="card-actions justify-end mt-4">
+          <span class="badge badge-neutral">Feature 3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte Inscriptions (TODO) -->
+    <div class="card bg-base-200 opacity-50 cursor-not-allowed">
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="card-title text-lg">Inscriptions</h2>
+          <span class="text-3xl">📋</span>
+        </div>
+        <p class="text-neutral-content text-sm">Disponible prochainement</p>
+        <div class="card-actions justify-end mt-4">
+          <span class="badge badge-neutral">Feature 4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte Rounds (TODO) -->
+    <div class="card bg-base-200 opacity-50 cursor-not-allowed">
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="card-title text-lg">Rounds</h2>
+          <span class="text-3xl">⚔️</span>
+        </div>
+        <p class="text-neutral-content text-sm">Disponible prochainement</p>
+        <div class="card-actions justify-end mt-4">
+          <span class="badge badge-neutral">Feature 6</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte Repas (TODO) -->
+    <div class="card bg-base-200 opacity-50 cursor-not-allowed">
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="card-title text-lg">Repas</h2>
+          <span class="text-3xl">🍽️</span>
+        </div>
+        <p class="text-neutral-content text-sm">Disponible prochainement</p>
+        <div class="card-actions justify-end mt-4">
+          <span class="badge badge-neutral">Feature 5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte Règles (TODO) -->
+    <div class="card bg-base-200 opacity-50 cursor-not-allowed">
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="card-title text-lg">Règles</h2>
+          <span class="text-3xl">📖</span>
+        </div>
+        <p class="text-neutral-content text-sm">Disponible prochainement</p>
+        <div class="card-actions justify-end mt-4">
+          <span class="badge badge-neutral">Feature 3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

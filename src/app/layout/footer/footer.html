@@ -1,0 +1,20 @@
+<footer class="footer footer-center bg-base-100 border-t border-base-200 px-8 py-6 mt-8">
+  <div class="flex flex-col md:flex-row items-center justify-between w-full gap-4">
+    <!-- Logo -->
+    <a routerLink="/" class="rounded-[16px] overflow-hidden">
+      <img src="logo-fsc.webp" alt="Logo Le fil sanguilaire Choletais" class="h-10 w-auto" />
+    </a>
+
+    <!-- Liens -->
+    <nav class="flex gap-6 text-sm">
+      <a routerLink="/" class="hover:text-primary transition-colors"> Accueil </a>
+      <a routerLink="/participants" class="hover:text-primary transition-colors">
+        Liste des participants
+      </a>
+      <a routerLink="/classement" class="hover:text-primary transition-colors"> Classement </a>
+    </nav>
+
+    <!-- Copyright -->
+    <p class="text-neutral-content text-sm">© {{ currentYear }} Le Fil Sanguinaire Choletais</p>
+  </div>
+</footer>
