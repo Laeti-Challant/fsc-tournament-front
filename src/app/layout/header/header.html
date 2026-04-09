@@ -1,1 +1,75 @@
-<p>header works!</p>
+<!-- src/app/layout/header/header.html -->
+
+<div class="navbar bg-base-100 shadow-md px-4">
+  <!-- ─── Logo ─────────────────────────────────── -->
+  <div class="navbar-start">
+    <div class="dropdown">
+      <label tabindex="0" class="btn btn-ghost lg:hidden">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h8m-8 6h16"
+          />
+        </svg>
+      </label>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+      >
+        <li><a routerLink="/classement" routerLinkActive="active">Classement</a></li>
+        <li><a routerLink="/participants" routerLinkActive="active">Participants</a></li>
+        @if (authService.isAuthenticated()) {
+          <li><a routerLink="/inscription" routerLinkActive="active">Inscription</a></li>
+        }
+      </ul>
+    </div>
+
+    <a routerLink="/" class="rounded-[16px] overflow-hidden">
+      <img src="logo-fsc.webp" alt="logo Le fil sanguinaire choletais" class="h-20 w-auto" />
+    </a>
+  </div>
+
+  <!-- ─── Navigation desktop ───────────────────── -->
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1">
+      <li><a routerLink="/classement" routerLinkActive="active">Classement</a></li>
+      <li><a routerLink="/participants" routerLinkActive="active">Participants</a></li>
+      @if (authService.isAuthenticated()) {
+        <li><a routerLink="/inscription" routerLinkActive="active">Inscription</a></li>
+      }
+    </ul>
+  </div>
+
+  <!-- ─── Actions droite ───────────────────────── -->
+  <div class="navbar-end gap-2">
+    @if (authService.isAuthenticated()) {
+      <span class="font-semibold hidden sm:block">
+        {{ authService.pseudo() }}
+      </span>
+
+      @if (authService.isAdmin()) {
+        <a routerLink="/admin/dashboard" class="btn btn-outline btn-sm"> Admin </a>
+      }
+
+      <button class="btn btn-ghost btn-sm" (click)="logout()">Déconnexion</button>
+    } @else {
+      <button class="btn btn-ghost btn-sm" (click)="modalService.openLogin()">Connexion</button>
+      <button class="btn btn-primary btn-sm" (click)="modalService.openRegister()">
+        Inscription
+      </button>
+    }
+  </div>
+</div>
+
+<!-- ─── Modales ───────────────────────────────── -->
+<app-login [isOpen]="modalService.showLogin()" (onClose)="modalService.closeAll()" />
+
+<app-register [isOpen]="modalService.showRegister()" (onClose)="modalService.closeAll()" />
