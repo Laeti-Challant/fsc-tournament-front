@@ -49,7 +49,7 @@ describe('UserService', () => {
   it('getUsers() devrait retourner une page de UserDTO', () => {
     const mockUsers: UserDTO[] = [
       { id: 1, pseudo: 'Nithog', role: 'ADMIN', active: true },
-      { id: 2, pseudo: 'Coach1', role: 'USER', active: true },
+      { id: 2, pseudo: 'Coach1', role: 'PLAYER', active: true },
     ];
     const mockPage = {
       content: mockUsers,
@@ -102,12 +102,11 @@ describe('UserService', () => {
     const req = httpMock.expectOne(`${environment.apiUrl}/users/me`);
     expect(req.request.method).toBe('GET');
     expect(req.request.withCredentials).toBe(true);
-    req.flush({ id: 1, pseudo: 'Nithog', role: 'USER', active: true });
+    req.flush({ id: 1, pseudo: 'Nithog', role: 'PLAYER', active: true });
   });
 
   it("getMe() devrait retourner le UserDTO de l'utilisateur connecté", () => {
-    const mockUser: UserDTO = { id: 1, pseudo: 'Nithog', role: 'USER', active: true };
-
+    const mockUser: UserDTO = { id: 1, pseudo: 'Nithog', role: 'PLAYER', active: true };
     service.getMe().subscribe((user) => {
       expect(user.pseudo).toBe('Nithog');
       expect(user.id).toBe(1);
