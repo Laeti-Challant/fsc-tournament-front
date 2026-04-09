@@ -20,27 +20,27 @@ export const routes: Routes = [
         canActivate: [authGuard]  
     },
 */
-    {
-        path: 'admin',
-        canActivate: [adminGuard],
-        children: [
-            {
-                path: 'dashboard',
-                component: AdminDashboard
-            },
-            {
-                path: 'users',
-                component: AdminUsers
-            },
-            {
-                path: '',
-                redirectTo: 'dashboard',
-                pathMatch: 'full'
-            }
-        ]
-    },
-    {
-        path: '**',
-        redirectTo: ''
-    }
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    children: [
+      {
+        path: 'dashboard',
+        component: AdminDashboard,
+      },
+      {
+        path: 'users',
+        component: AdminUsers,
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+    ],
+  },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

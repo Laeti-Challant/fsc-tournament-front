@@ -40,7 +40,7 @@ describe('AuthService', () => {
   // ─── Tests login ──────────────────────────────────────────────
 
   it('login() devrait appeler POST /auth/login', () => {
-    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'USER' };
+    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'PLAYER' };
 
     service.login({ email: 'nithog@test.com', password: '123' }).subscribe();
 
@@ -51,7 +51,7 @@ describe('AuthService', () => {
   });
 
   it('login() devrait mettre à jour le signal currentUser', () => {
-    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'USER' };
+    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'PLAYER' };
 
     service.login({ email: 'nithog@test.com', password: '123' }).subscribe();
 
@@ -93,7 +93,7 @@ describe('AuthService', () => {
 
   it('logout() devrait vider le signal currentUser', () => {
     // D'abord on connecte un utilisateur
-    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'USER' };
+    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'PLAYER' };
     service.login({ email: 'nithog@test.com', password: '123' }).subscribe();
     httpMock.expectOne(`${environment.apiUrl}/auth/login`).flush(mockResponse);
     expect(service.isAuthenticated()).toBe(true); // vérification intermédiaire

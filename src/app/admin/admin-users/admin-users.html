@@ -1,1 +1,97 @@
-<p>admin-users works!</p>
+<div class="p-6">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-bold">Gestion des utilisateurs</h1>
+    <a routerLink="/admin/dashboard" class="btn btn-ghost btn-sm"> ← Retour </a>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else if (page()) {
+    <!-- Tableau -->
+    <div class="overflow-x-auto rounded-[16px]">
+      <table class="table bg-base-200">
+        <thead>
+          <tr class="text-base-content">
+            <th>Pseudo</th>
+            <th>Rôle</th>
+            <th>Actif</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (user of page()!.content; track user.id) {
+            @if (user.pseudo !== authService.pseudo()) {
+              <tr class="hover:bg-base-300 transition-colors">
+                <td class="font-medium">{{ user.pseudo }}</td>
+
+                <td>
+                  <span
+                    class="badge"
+                    [class]="user.role === 'ADMIN' ? 'badge-primary' : 'badge-neutral'"
+                  >
+                    {{ user.role }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="badge" [class]="user.active ? 'badge-success' : 'badge-error'">
+                    {{ user.active ? 'Actif' : 'Inactif' }}
+                  </span>
+                </td>
+
+                <td class="flex gap-2">
+                  <button class="btn btn-xs btn-outline" (click)="toggleRole(user)">
+                    {{ user.role === 'ADMIN' ? '→ PLAYER' : '→ ADMIN' }}
+                  </button>
+                  <button
+                    class="btn btn-xs"
+                    [class]="user.active ? 'btn-error' : 'btn-success'"
+                    (click)="toggleActive(user)"
+                  >
+                    {{ user.active ? 'Désactiver' : 'Activer' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (page()!.totalPages > 1) {
+      <div class="flex justify-center gap-2 mt-6">
+        <button
+          class="btn btn-sm"
+          [disabled]="currentPage() === 0"
+          (click)="goToPage(currentPage() - 1)"
+        >
+          «
+        </button>
+
+        @for (p of getPages(); track p) {
+          <button
+            class="btn btn-sm"
+            [class]="p === currentPage() ? 'btn-primary' : 'btn-ghost'"
+            (click)="goToPage(p)"
+          >
+            {{ p + 1 }}
+          </button>
+        }
+
+        <button
+          class="btn btn-sm"
+          [disabled]="currentPage() === page()!.totalPages - 1"
+          (click)="goToPage(currentPage() + 1)"
+        >
+          »
+        </button>
+      </div>
+    }
+  } @else {
+    <p class="text-neutral-content text-center py-12">Impossible de charger les utilisateurs.</p>
+  }
+</div>
