@@ -84,6 +84,22 @@ export class Home implements OnInit, OnDestroy {
     this.countdownInterval = setInterval(tick, 1000);
   }
 
+  categoriesGrouped = computed(() => {
+    const cats = this.rules()?.rosterCategories ?? [];
+    const map = new Map<number, string[]>();
+
+    cats.forEach((c) => {
+      if (!map.has(c.categoryValue)) {
+        map.set(c.categoryValue, []);
+      }
+      map.get(c.categoryValue)!.push(c.raceName);
+    });
+
+    return Array.from(map.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([value, races]) => ({ value, races }));
+  });
+
   onInscriptionClick(): void {
     if (this.auth.isAuthenticated()) {
       this.router.navigate(['/inscription']);
