@@ -5,11 +5,11 @@ import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminUsers } from './admin/admin-users/admin-users';
 
 export const routes: Routes = [
-  /*  {
-        path: '',
-        loadComponent: () => import('./pages/home/home').then(c => c.HomeComponent)
-    },
-
+  {
+    path: '',
+    loadComponent: () => import('./pages/home/home').then((c) => c.Home),
+  },
+  /*
     {
         path: 'profil', 
         loadComponent: () => import('./pages/profil/profil').then(c => c.ProfilComponent)

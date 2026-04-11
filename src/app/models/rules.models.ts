@@ -22,7 +22,7 @@ export interface TournamentRules {
   mogettePoValue: number;
   notesText?: string;
   rosterText?: string;
-  inducements: AllowedInducement[];
+  allowedInducements: AllowedInducement[];
   rosterCategories: RosterCategory[];
 }
 

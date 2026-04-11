@@ -1,10 +1,12 @@
+import { TournamentRules } from './rules.models';
+
 export type EventStatus = 'PLANNED' | 'REGISTRATION_CLOSED' | 'IN_PROGRESS' | 'FINISHED';
 
 export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
   PLANNED: 'Planifié',
   REGISTRATION_CLOSED: 'Inscriptions fermées',
   IN_PROGRESS: 'En cours',
-  FINISHED: 'Terminé'
+  FINISHED: 'Terminé',
 };
 
 export interface EventSummary {
