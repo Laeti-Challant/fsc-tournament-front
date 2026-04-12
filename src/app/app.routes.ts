@@ -3,13 +3,15 @@ import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminUsers } from './admin/admin-users/admin-users';
+import { AdminEvent } from './admin/admin-event/admin-event';
+import { AdminRules } from './admin/admin-rules/admin-rules';
 
 export const routes: Routes = [
-  /*  {
-        path: '',
-        loadComponent: () => import('./pages/home/home').then(c => c.HomeComponent)
-    },
-
+  {
+    path: '',
+    loadComponent: () => import('./pages/home/home').then((c) => c.Home),
+  },
+  /*
     {
         path: 'profil', 
         loadComponent: () => import('./pages/profil/profil').then(c => c.ProfilComponent)
@@ -31,6 +33,14 @@ export const routes: Routes = [
       {
         path: 'users',
         component: AdminUsers,
+      },
+      {
+        path: 'event',
+        component: AdminEvent,
+      },
+      {
+        path: 'rules',
+        component: AdminRules,
       },
       {
         path: '',

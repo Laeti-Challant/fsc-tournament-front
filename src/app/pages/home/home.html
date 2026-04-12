@@ -1,0 +1,219 @@
+<!-- LOADING -->
+@if (loading()) {
+  <div class="flex justify-center items-center min-h-screen">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+}
+
+<!-- ERREUR -->
+@if (!loading() && error()) {
+  <div class="flex justify-center items-center min-h-screen">
+    <div class="alert alert-error max-w-md">
+      <span>{{ error() }}</span>
+    </div>
+  </div>
+}
+
+<!-- CONTENU PRINCIPAL -->
+@if (!loading() && !error() && event(); as event) {
+  <!-- ========== HERO ========== -->
+  <section
+    class="hero-fsc relative flex flex-col md:gap-12 items-center justify-center min-h-[60vh] bg-base-100 px-4 py-12 text-center overflow-hidden"
+  >
+    <h1 class="title-hero text-6xl md:text-8xl tracking-tight mb-8 relative z-10">
+      {{ event.name }}
+    </h1>
+
+    <!-- COUNTDOWN -->
+    <div class="flex gap-1 md:gap-4 mb-8 relative z-10">
+      @for (
+        unit of [
+          { value: countdown().days, label: 'jours' },
+          { value: countdown().hours, label: 'heures' },
+          { value: countdown().minutes, label: 'min' },
+          { value: countdown().seconds, label: 'sec' },
+        ];
+        track unit.label
+      ) {
+        <div class="flex flex-col items-center bg-base-200 rounded-lg px-4 py-4 min-w-24 shadow">
+          <span class="title-section font-bold tabular-nums">
+            {{ unit.value | number: '2.0-0' }}
+          </span>
+          <span class="text-xs uppercase text-base-content/60 mt-1">{{ unit.label }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- BOUTON INSCRIPTION -->
+    @if (showInscriptionButton()) {
+      <button
+        class="btn btn-primary btn-xl title-section uppercase tracking-widest relative z-10"
+        (click)="onInscriptionClick()"
+      >
+        Participer
+      </button>
+    }
+  </section>
+
+  <!-- ========== RULES SET ========== -->
+  @if (rules()) {
+    <section class="container mx-auto px-4 py-12">
+      <h2 class="title-section text-center uppercase tracking-wide mb-8">Rules Set</h2>
+
+      @if (rules()!.notesText) {
+        <div class="card bg-base-200 shadow mb-6">
+          <div class="card-body">
+            <h3 class="title-card text-primary">Règles de base</h3>
+            <p class="whitespace-pre-line text-sm leading-relaxed">{{ rules()!.notesText }}</p>
+          </div>
+        </div>
+      }
+
+      @if (rules()!.rosterText) {
+        <div class="card bg-base-200 shadow mb-6">
+          <div class="card-body">
+            <h3 class="title-card text-primary">Règles de constitution des Rosters</h3>
+            <p class="whitespace-pre-line text-sm leading-relaxed">{{ rules()!.rosterText }}</p>
+          </div>
+        </div>
+      }
+
+      @if (rules()?.allowedInducements?.length) {
+        <div class="card bg-base-200 shadow mb-6">
+          <div class="card-body">
+            <h3 class="title-card text-primary">Coups de pouce autorisés</h3>
+            <ul class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
+              @for (inducement of rules()!.allowedInducements; track inducement.id) {
+                <li class="flex justify-between text-sm py-1 border-b border-base-300">
+                  <span>{{ inducement.name }}</span>
+                  <span class="text-base-content/60 ml-4 shrink-0">
+                    @if (inducement.minQty === 0 && inducement.maxQty === 1) {
+                      0-1
+                    } @else {
+                      {{ inducement.minQty }}-{{ inducement.maxQty }}
+                    }
+                  </span>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+
+      @if (rules()?.rosterCategories?.length) {
+        <div class="card bg-base-200 shadow mb-6">
+          <div class="card-body">
+            <h3 class="title-card text-primary">Catégories de roster</h3>
+            <div class="mt-2 flex flex-col gap-4">
+              @for (cat of categoriesGrouped(); track cat.value) {
+                <div>
+                  <p class="subtitle-card text-base-content/70 mb-1">
+                    Catégorie {{ cat.value }}
+                    <span class="text-xs text-primary ml-2">
+                      ({{ cat.value }} mogette{{ cat.value > 1 ? 's' : '' }} d'or)
+                    </span>
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    @for (race of cat.races; track race) {
+                      <span class="badge badge-outline badge-sm">{{ race }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Récap chiffres clés -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+        <div class="stat bg-base-200 rounded-lg shadow">
+          <div class="subtitle-card">Budget</div>
+          <div class="stat-value text-lg">{{ rules()!.budgetPo | number }} po</div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg shadow">
+          <div class="subtitle-card">PSP</div>
+          <div class="stat-value text-lg">{{ rules()!.pspPool }}</div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg shadow">
+          <div class="subtitle-card">Compétences max</div>
+          <div class="stat-value text-lg">{{ rules()!.maxSkillsPerPlayer }}/joueur</div>
+        </div>
+        <div class="stat bg-base-200 rounded-lg shadow">
+          <div class="subtitle-card">Mode</div>
+          <div class="stat-value text-lg text-primary">
+            {{ rules()!.resurrectionMode ? 'Résurrection' : 'Standard' }}
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- ========== INFOS EVENT ========== -->
+  <section class="hero-fsc px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="title-section text-center uppercase tracking-wide mb-2">
+        {{ event.name }}
+      </h2>
+      <h2 class="title-section text-center text-primary font-semibold text-lg mb-8">
+        {{ event.eventDate | date: 'dd MMMM yyyy' : '' : 'fr' }}
+      </h2>
+
+      <div class="flex flex-col md:flex-row gap-8 items-start justify-center">
+        <!-- Texte infos -->
+        <div class="flex-1">
+          <p class="text-base-content/80 text-sm leading-relaxed">
+            Tarif : 50€ ou 55€ (non-NAF)<br />
+            Formule Tournoi + repas
+          </p>
+        </div>
+        <!-- Placeholder carte -->
+        <div
+          class="flex-1 bg-base-300 rounded-xl h-40 flex items-center justify-center text-base-content/30 text-sm"
+        >
+          Carte OpenStreetMap à venir
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MENU ========== -->
+  <section class="container mx-auto px-4 py-12">
+    <h2 class="title-section text-center uppercase tracking-wide mb-8">Menu</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      @for (label of ['Menu Samedi midi', 'Menu Samedi soir', 'Menu Dimanche midi']; track label) {
+        <div class="card bg-base-200 shadow min-h-30 flex items-center justify-center">
+          <div class="card-body items-center text-center">
+            <h3 class="title-card text-sm font-semibold">{{ label }}</h3>
+            <p class="text-base-content/40 text-xs italic">À venir</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ========== DERNIERS PARTICIPANTS ========== -->
+  <section class="bg-base-200 px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="title-section text-center uppercase tracking-wide mb-8">
+        Derniers participants inscrits
+      </h2>
+
+      <!-- Placeholder — sera branché Feature 4 (CoachService) -->
+      <div class="grid grid-cols-2 gap-2 max-w-md mx-auto mb-8">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <div class="flex justify-between text-sm text-base-content/40 italic px-2">
+            <span>pseudo</span>
+            <span>Nom du club</span>
+          </div>
+        }
+      </div>
+
+      <div class="flex justify-center">
+        <a routerLink="/participants" class="btn btn-primary btn-outline uppercase tracking-widest">
+          Liste des participants
+        </a>
+      </div>
+    </div>
+  </section>
+}

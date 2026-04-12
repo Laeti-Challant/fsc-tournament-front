@@ -1,0 +1,140 @@
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <!-- Titre -->
+  <h2 class="title-section text-center uppercase mb-8">
+    {{ isEditMode() ? "Modifier l'événement" : 'Créer un événement' }}
+  </h2>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  }
+
+  @if (!loading()) {
+    <div class="card bg-base-200 shadow-xl">
+      <div class="card-body gap-6">
+        <!-- Alertes -->
+        @if (errorMessage()) {
+          <div class="alert alert-error">
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+        @if (successMessage()) {
+          <div class="alert alert-success">
+            <span>{{ successMessage() }}</span>
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Nom de l'événement -->
+          <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">Nom de l'événement</legend>
+            <input
+              type="text"
+              class="input input-bordered w-full"
+              [class.input-error]="form.controls.name.invalid && form.controls.name.touched"
+              formControlName="name"
+              placeholder="ex: CholetBowl IX"
+            />
+            @if (form.controls.name.invalid && form.controls.name.touched) {
+              <p class="text-error mt-1">Nom requis (3 caractères minimum).</p>
+            }
+          </fieldset>
+
+          <!-- Date de l'événement -->
+          <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">Date du tournoi</legend>
+            <input
+              type="date"
+              class="input input-bordered w-full"
+              [class.input-error]="
+                form.controls.eventDate.invalid && form.controls.eventDate.touched
+              "
+              formControlName="eventDate"
+            />
+            @if (form.controls.eventDate.invalid && form.controls.eventDate.touched) {
+              <p class="text-error mt-1">Date requise.</p>
+            }
+          </fieldset>
+
+          <!-- Date limite d'inscription -->
+          <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">Date limite d'inscription</legend>
+            <input
+              type="date"
+              class="input input-bordered w-full"
+              [class.input-error]="
+                form.controls.registrationDeadline.invalid &&
+                form.controls.registrationDeadline.touched
+              "
+              formControlName="registrationDeadline"
+            />
+            @if (
+              form.controls.registrationDeadline.invalid &&
+              form.controls.registrationDeadline.touched
+            ) {
+              <p class="text-error mt-1">Date limite requise.</p>
+            }
+          </fieldset>
+
+          <!-- Participants + Rondes côte à côte -->
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Participants max</legend>
+              <input
+                type="number"
+                class="input input-bordered w-full"
+                [class.input-error]="
+                  form.controls.maxParticipants.invalid && form.controls.maxParticipants.touched
+                "
+                formControlName="maxParticipants"
+                min="2"
+              />
+              @if (form.controls.maxParticipants.invalid && form.controls.maxParticipants.touched) {
+                <p class="text-error mt-1">Minimum 2 participants.</p>
+              }
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Nombre de rondes</legend>
+              <input
+                type="number"
+                class="input input-bordered w-full"
+                [class.input-error]="
+                  form.controls.nbRounds.invalid && form.controls.nbRounds.touched
+                "
+                formControlName="nbRounds"
+                min="1"
+              />
+              @if (form.controls.nbRounds.invalid && form.controls.nbRounds.touched) {
+                <p class="text-error mt-1">Minimum 1 ronde.</p>
+              }
+            </fieldset>
+          </div>
+
+          <!-- Boutons -->
+          <div class="flex justify-end gap-3">
+            <button
+              type="button"
+              class="btn btn-ghost btn-md md:btn-lg"
+              (click)="router.navigate(['/admin/dashboard'])"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary btn-md md:btn-lg"
+              [disabled]="submitting()"
+            >
+              @if (submitting()) {
+                <span class="loading loading-spinner loading-sm"></span>
+              }
+              {{ isEditMode() ? 'Mettre à jour' : 'Créer' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
