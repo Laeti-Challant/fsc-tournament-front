@@ -18,9 +18,9 @@
 @if (!loading() && !error() && event(); as event) {
   <!-- ========== HERO ========== -->
   <section
-    class="hero-fsc relative flex flex-col items-center justify-center min-h-[60vh] bg-base-100 px-4 py-12 text-center overflow-hidden"
+    class="hero-fsc relative flex flex-col md:gap-12 items-center justify-center min-h-[60vh] bg-base-100 px-4 py-12 text-center overflow-hidden"
   >
-    <h1 class="title-hero uppercase tracking-tight mb-8 relative z-10">
+    <h1 class="title-hero text-6xl md:text-8xl tracking-tight mb-8 relative z-10">
       {{ event.name }}
     </h1>
 
@@ -47,7 +47,7 @@
     <!-- BOUTON INSCRIPTION -->
     @if (showInscriptionButton()) {
       <button
-        class="btn btn-primary btn-lg uppercase tracking-widest relative z-10"
+        class="btn btn-primary btn-xl title-section uppercase tracking-widest relative z-10"
         (click)="onInscriptionClick()"
       >
         Participer
