@@ -32,8 +32,12 @@
       </ul>
     </div>
 
-    <a routerLink="/" class="rounded-[16px] overflow-hidden">
-      <img src="logo-fsc.webp" alt="logo Le fil sanguinaire choletais" class="h-20 w-auto" />
+    <a routerLink="/" class="p-2 overflow-hidden">
+      <img
+        src="logo-fsc.webp"
+        alt="logo Le fil sanguinaire choletais"
+        class="h-20 w-auto rounded-[16px]"
+      />
     </a>
   </div>
 
@@ -59,10 +63,12 @@
         <a routerLink="/admin/dashboard" class="btn btn-outline btn-sm"> Admin </a>
       }
 
-      <button class="btn btn-ghost btn-sm" (click)="logout()">Déconnexion</button>
+      <button class="btn btn-ghost btn-md md:btn-lg" (click)="logout()">Déconnexion</button>
     } @else {
-      <button class="btn btn-ghost btn-sm" (click)="modalService.openLogin()">Connexion</button>
-      <button class="btn btn-primary btn-sm" (click)="modalService.openRegister()">
+      <button class="btn btn-ghost btn-md md:btn-lg" (click)="modalService.openLogin()">
+        Connexion
+      </button>
+      <button class="btn btn-primary btn-md md:btn-lg" (click)="modalService.openRegister()">
         Inscription
       </button>
     }

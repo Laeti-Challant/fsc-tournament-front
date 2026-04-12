@@ -85,6 +85,12 @@
   font-weight: 500;
 }
 
+.navbar a {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 500;
+}
+
 /* Corps de texte */
 body,
 p,
