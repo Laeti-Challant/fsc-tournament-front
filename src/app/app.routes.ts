@@ -3,6 +3,7 @@ import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminUsers } from './admin/admin-users/admin-users';
+import { AdminEvent } from './admin/admin-event/admin-event';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,10 @@ export const routes: Routes = [
       {
         path: 'users',
         component: AdminUsers,
+      },
+      {
+        path: 'event',
+        component: AdminEvent,
       },
       {
         path: '',
