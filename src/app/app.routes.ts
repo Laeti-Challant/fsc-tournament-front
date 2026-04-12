@@ -4,6 +4,7 @@ import { adminGuard } from './guards/admin-guard';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminUsers } from './admin/admin-users/admin-users';
 import { AdminEvent } from './admin/admin-event/admin-event';
+import { AdminRules } from './admin/admin-rules/admin-rules';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,10 @@ export const routes: Routes = [
       {
         path: 'event',
         component: AdminEvent,
+      },
+      {
+        path: 'rules',
+        component: AdminRules,
       },
       {
         path: '',
