@@ -1,0 +1,284 @@
+<div class="container mx-auto px-4 py-10">
+  <h2 class="title-section text-center uppercase mb-8">
+    {{ isEditMode() ? 'Modifier le ruleset' : 'Créer le ruleset' }}
+  </h2>
+
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  }
+
+  @if (!loading()) {
+    <!-- Alertes -->
+    @if (errorMessage()) {
+      <div class="alert alert-error mb-6">
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+    @if (successMessage()) {
+      <div class="alert alert-success mb-6">
+        <span>{{ successMessage() }}</span>
+      </div>
+    }
+
+    <!-- Proposition de clonage -->
+    @if (!isEditMode() && previousEvent()) {
+      <div class="alert mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <span
+          >Un ruleset existe pour <strong>{{ previousEvent()!.name }}</strong
+          >. Voulez-vous le cloner comme point de départ ?</span
+        >
+        <button
+          class="btn btn-primary btn-sm shrink-0"
+          [disabled]="cloning()"
+          (click)="cloneFromPrevious()"
+        >
+          @if (cloning()) {
+            <span class="loading loading-spinner loading-xs"></span>
+          }
+          Cloner
+        </button>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <!-- ── PARAMÈTRES GÉNÉRAUX ── -->
+      <div class="card bg-base-200 shadow mb-6 shadow-fsc">
+        <div class="card-body">
+          <h3 class="title-card text-primary mb-4">Paramètres généraux</h3>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Budget (po)</legend>
+              <input
+                type="number"
+                class="input input-bordered w-full"
+                formControlName="budgetPo"
+                min="1"
+              />
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">PSP pool</legend>
+              <input
+                type="number"
+                class="input input-bordered w-full"
+                formControlName="pspPool"
+                min="1"
+              />
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Compétences max/joueur</legend>
+              <input
+                type="number"
+                class="input input-bordered w-full"
+                formControlName="maxSkillsPerPlayer"
+                min="1"
+              />
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Valeur mogette (PSP)</legend>
+              <input
+                type="number"
+                class="input input-bordered w-full"
+                formControlName="mogettePspValue"
+                min="1"
+              />
+            </fieldset>
+
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Valeur mogette (po)</legend>
+              <input
+                type="number"
+                class="input input-bordered w-full"
+                formControlName="mogettePoValue"
+                min="1"
+              />
+            </fieldset>
+
+            <fieldset class="fieldset justify-center">
+              <legend class="fieldset-legend">Mode Résurrection</legend>
+              <input
+                type="checkbox"
+                class="checkbox checkbox-primary mt-2"
+                formControlName="resurrectionMode"
+              />
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TEXTES ── -->
+      <div class="card bg-base-200 shadow mb-6 shadow-fsc">
+        <div class="card-body">
+          <h3 class="title-card text-primary mb-4">Textes des règles</h3>
+
+          <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">Règles de base (notesText)</legend>
+            <textarea
+              class="textarea textarea-bordered w-full h-32"
+              formControlName="notesText"
+              placeholder="Règles générales du tournoi..."
+            ></textarea>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Constitution des rosters (rosterText)</legend>
+            <textarea
+              class="textarea textarea-bordered w-full h-32"
+              formControlName="rosterText"
+              placeholder="Règles de constitution des rosters..."
+            ></textarea>
+          </fieldset>
+        </div>
+      </div>
+
+      <!-- ── INDUCEMENTS ── -->
+      <div class="card bg-base-200 shadow mb-6 shadow-fsc">
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="title-card text-primary">Coups de pouce</h3>
+            <button
+              type="button"
+              class="btn btn-outline btn-md btn-primary"
+              (click)="addInducement()"
+            >
+              + Ajouter
+            </button>
+          </div>
+
+          @if (inducements.length === 0) {
+            <p class="text-base-content/50 text-sm italic">Aucun coup de pouce ajouté.</p>
+          }
+
+          <div formArrayName="allowedInducements" class="flex flex-col gap-3">
+            @for (_ of inducements.controls; track $index) {
+              <div
+                [formGroupName]="$index"
+                class="grid grid-cols-12 gap-2 items-center bg-base-300 rounded-lg px-3 py-2"
+              >
+                <input
+                  type="text"
+                  class="input input-bordered input-full md:w-2/3 col-span-12 md:col-span-6"
+                  formControlName="name"
+                  placeholder="Nom du coup de pouce"
+                />
+
+                <div class="col-span-4 md:col-span-2 flex flex-col items-center">
+                  <span class="text-xs text-base-content/50 mb-1">Min</span>
+                  <input
+                    type="number"
+                    class="input input-bordered input-sm w-full"
+                    formControlName="minQty"
+                    min="0"
+                  />
+                </div>
+
+                <div class="col-span-4 md:col-span-2 flex flex-col items-center">
+                  <span class="text-xs text-base-content/50 mb-1">Max</span>
+                  <input
+                    type="number"
+                    class="input input-bordered input-sm w-full"
+                    formControlName="maxQty"
+                    min="1"
+                  />
+                </div>
+
+                <div class="col-span-4 md:col-span-2 flex justify-end">
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-sm text-error"
+                    (click)="removeInducement($index)"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CATÉGORIES DE ROSTER ── -->
+      <div class="card bg-base-200 shadow mb-6 shadow-fsc">
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="title-card text-primary">Catégories de roster</h3>
+            <button
+              type="button"
+              class="btn btn-outline btn-md btn-primary"
+              (click)="addCategory()"
+            >
+              + Ajouter
+            </button>
+          </div>
+
+          @if (rosterCategories.length === 0) {
+            <p class="text-base-content/50 text-sm italic">Aucune catégorie ajoutée.</p>
+          }
+
+          <div formArrayName="rosterCategories" class="flex flex-col gap-3">
+            @for (_ of rosterCategories.controls; track $index) {
+              <div
+                [formGroupName]="$index"
+                class="grid grid-cols-12 gap-2 items-center bg-base-300 rounded-lg px-3 py-2"
+              >
+                <input
+                  type="text"
+                  class="input input-bordered input-full md:w-2/3 col-span-12 md:col-span-6"
+                  formControlName="raceName"
+                  placeholder="Nom de la race"
+                />
+
+                <div class="col-span-4 md:col-span-2 flex flex-col items-center">
+                  <span class="text-xs text-base-content/50 mb-1">Catégorie</span>
+                  <input
+                    type="number"
+                    class="input input-bordered input-sm w-full"
+                    formControlName="categoryValue"
+                    min="0"
+                  />
+                </div>
+
+                <div class="col-span-4 md:col-span-2 flex flex-col items-center">
+                  <span class="text-xs text-base-content/50 mb-1">Minus</span>
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-primary checkbox-sm mt-1"
+                    formControlName="isMinus"
+                  />
+                </div>
+
+                <div class="col-span-4 md:col-span-2 flex justify-end">
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-sm text-error"
+                    (click)="removeCategory($index)"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BOUTONS ── -->
+      <div class="flex justify-end gap-3">
+        <button type="button" class="btn btn-ghost" (click)="router.navigate(['/admin/dashboard'])">
+          Annuler
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="loading loading-spinner loading-sm"></span>
+          }
+          {{ isEditMode() ? 'Mettre à jour' : 'Créer' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>
