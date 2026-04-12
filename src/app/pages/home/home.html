@@ -25,7 +25,7 @@
     </h1>
 
     <!-- COUNTDOWN -->
-    <div class="flex gap-3 md:gap-4 mb-8 relative z-10">
+    <div class="flex gap-1 md:gap-4 mb-8 relative z-10">
       @for (
         unit of [
           { value: countdown().days, label: 'jours' },
@@ -36,7 +36,7 @@
         track unit.label
       ) {
         <div class="flex flex-col items-center bg-base-200 rounded-lg px-4 py-4 min-w-24 shadow">
-          <span class="text-3xl md:text-4xl font-bold tabular-nums">
+          <span class="title-section font-bold tabular-nums">
             {{ unit.value | number: '2.0-0' }}
           </span>
           <span class="text-xs uppercase text-base-content/60 mt-1">{{ unit.label }}</span>
