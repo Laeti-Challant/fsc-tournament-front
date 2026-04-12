@@ -42,7 +42,15 @@
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Graduate&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@font-face {
+  font-family: 'Graduate';
+  src: url('/assets/fonts/Graduate/Graduate-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
   --font-display: 'Graduate', serif;
@@ -50,21 +58,21 @@
 }
 
 /* Titre principal H1 */
-h1.title-hero {
+.title-hero {
   font-family: var(--font-display);
-  font-size: 64px;
+
   font-weight: 400;
 }
 
 /* Titres de section H2 */
-h2.title-section {
+.title-section {
   font-family: var(--font-body);
   font-size: 32px;
   font-weight: 700;
 }
 
 /* Titres de carte H3 */
-h3.title-card {
+.title-card {
   font-family: var(--font-body);
   font-size: 24px;
   font-weight: 500;
@@ -72,6 +80,12 @@ h3.title-card {
 
 /* Sous-titres de carte */
 .subtitle-card {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.navbar a {
   font-family: var(--font-body);
   font-size: 20px;
   font-weight: 500;
