@@ -5,17 +5,20 @@ import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminUsers } from './admin/admin-users/admin-users';
 import { AdminEvent } from './admin/admin-event/admin-event';
 import { AdminRules } from './admin/admin-rules/admin-rules';
+import { Profil } from './pages/profil/profil';
+import { Home } from './pages/home/home';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/home/home').then((c) => c.Home),
   },
+
+  {
+    path: 'profil',
+    loadComponent: () => import('./pages/profil/profil').then((c) => c.Profil),
+  },
   /*
-    {
-        path: 'profil', 
-        loadComponent: () => import('./pages/profil/profil').then(c => c.ProfilComponent)
-    },
     {
         path: 'inscription',
         loadComponent: () => import('./pages/inscription/inscription').then(c => c.InscriptionComponent),

@@ -2,7 +2,7 @@ export type Role = 'PLAYER' | 'ADMIN';
 
 export interface UserDTO {
   id: number;
-  email?: string;
+  email: string;
   pseudo: string;
   role: Role;
   active: boolean;
