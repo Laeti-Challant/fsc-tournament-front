@@ -1,0 +1,72 @@
+<div class="container mx-auto p-6 max-w-2xl">
+  <h1 class="title-section text-center uppercase mb-6">Mon profil</h1>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error mb-4">{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert-success mb-4">{{ successMessage() }}</div>
+  }
+
+  @if (user()) {
+    <!-- Infos générales -->
+    <div class="card bg-base-200 mb-6 p-4 shadow-fsc">
+      <p><span class="font-semibold">Rôle :</span> {{ user()!.role }}</p>
+      <p><span class="font-semibold">Compte actif :</span> {{ user()!.active ? 'Oui' : 'Non' }}</p>
+    </div>
+
+    <!-- Modifier le pseudo -->
+    <div tabindex="0" class="collapse collapse-arrow bg-base-200 shadow-fsc mb-4 p-4">
+      <div class="collapse-title subtitle-card">Modifier le pseudo</div>
+      <div class="collapse-content">
+        <input
+          type="text"
+          class="input input-bordered w-full mb-3"
+          [(ngModel)]="pseudoForm.pseudo"
+          placeholder="Nouveau pseudo"
+        />
+        <button class="btn btn-primary" (click)="updatePseudo()">Enregistrer</button>
+      </div>
+    </div>
+
+    <!-- Modifier l'email -->
+    <div tabindex="0" class="collapse collapse-arrow bg-base-200 shadow-fsc mb-4 p-4">
+      <div class="collapse-title subtitle-card">Modifier l'email</div>
+      <div class="collapse-content">
+        <input
+          type="email"
+          class="input input-bordered w-full mb-3"
+          [(ngModel)]="emailForm.email"
+          placeholder="Nouvel email"
+        />
+        <input
+          type="password"
+          class="input input-bordered w-full mb-3"
+          [(ngModel)]="emailForm.confirmPassword"
+          placeholder="Confirmez votre mot de passe"
+        />
+        <button class="btn btn-primary" (click)="updateEmail()">Enregistrer</button>
+      </div>
+    </div>
+
+    <!-- Modifier le mot de passe -->
+    <div tabindex="0" class="collapse collapse-arrow bg-base-200 shadow-fsc mb-4 p-4">
+      <div class="collapse-title subtitle-card">Modifier le mot de passe</div>
+      <div class="collapse-content">
+        <input
+          type="password"
+          class="input input-bordered w-full mb-3"
+          [(ngModel)]="passwordForm.newPassword"
+          placeholder="Nouveau mot de passe"
+        />
+        <input
+          type="password"
+          class="input input-bordered w-full mb-3"
+          [(ngModel)]="passwordForm.confirmPassword"
+          placeholder="Confirmer le mot de passe"
+        />
+        <button class="btn btn-primary" (click)="updatePassword()">Enregistrer</button>
+      </div>
+    </div>
+  }
+</div>
