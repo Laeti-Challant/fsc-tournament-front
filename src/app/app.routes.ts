@@ -18,13 +18,13 @@ export const routes: Routes = [
     path: 'profil',
     loadComponent: () => import('./pages/profil/profil').then((c) => c.Profil),
   },
-  /*
-    {
-        path: 'inscription',
-        loadComponent: () => import('./pages/inscription/inscription').then(c => c.InscriptionComponent),
-        canActivate: [authGuard]  
-    },
-*/
+
+  {
+    path: 'inscription',
+    loadComponent: () => import('./pages/inscription/inscription').then((c) => c.Inscription),
+    canActivate: [authGuard],
+  },
+
   {
     path: 'admin',
     canActivate: [adminGuard],

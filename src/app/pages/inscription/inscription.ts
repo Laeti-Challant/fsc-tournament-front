@@ -6,7 +6,7 @@ import { RulesService } from '../../services/rules.service';
 import { Router, RouterLink } from '@angular/router';
 import { EventDetail } from '../../models/event.models';
 import { RosterCategory } from '../../models/rules.models';
-import { CoachCreate } from '../../models/coach.models';
+import { CoachCreate, CoachUpdate } from '../../models/coach.models';
 
 @Component({
   selector: 'app-inscription',
@@ -26,6 +26,8 @@ export class Inscription implements OnInit {
   registrationClosed = signal(false);
   tournamentFull = signal(false);
   loading = signal(true);
+  editMode = signal(false);
+  rosterLink: string | null = null;
 
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
@@ -84,11 +86,20 @@ export class Inscription implements OnInit {
   private checkExistingRegistration(tournamentId: number): void {
     this.coachService.getMyCoach(tournamentId).subscribe({
       next: (coach) => {
-        this.alreadyRegistered.set(coach !== null);
+        if (coach) {
+          this.editMode.set(true);
+          this.form = {
+            coachPseudo: coach.coachPseudo,
+            teamName: coach.teamName,
+            race: coach.race,
+            eating: coach.eating,
+            vegetarian: coach.vegetarian,
+          };
+          this.rosterLink = coach.rosterLink;
+        }
         this.loading.set(false);
       },
       error: () => {
-        this.alreadyRegistered.set(false);
         this.loading.set(false);
       },
     });
@@ -116,6 +127,37 @@ export class Inscription implements OnInit {
           this.errorMessage.set(err.error || 'Données invalides.');
         } else {
           this.errorMessage.set("Erreur lors de l'inscription.");
+        }
+      },
+    });
+  }
+
+  update(): void {
+    this.clearMessages();
+    const tournamentId = this.tournament()?.id;
+    if (!tournamentId) return;
+
+    if (!this.form.eating) {
+      this.form.vegetarian = false;
+    }
+
+    const dto: CoachUpdate = {
+      ...this.form,
+      rosterLink: this.rosterLink,
+    };
+
+    this.coachService.updateMe(tournamentId, dto).subscribe({
+      next: () => {
+        this.successMessage.set('Inscription mise à jour !');
+        setTimeout(() => this.router.navigate(['/profil']), 1500);
+      },
+      error: (err) => {
+        if (err.status === 409) {
+          this.errorMessage.set(err.error || 'Modification impossible.');
+        } else if (err.status === 400) {
+          this.errorMessage.set(err.error || 'Données invalides.');
+        } else {
+          this.errorMessage.set('Erreur lors de la modification.');
         }
       },
     });

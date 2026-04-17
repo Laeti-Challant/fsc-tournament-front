@@ -16,11 +16,6 @@
     <div class="card bg-base-200 p-6 shadow-fsc text-center">
       <p class="text-lg">Les inscriptions sont fermées pour ce tournoi.</p>
     </div>
-  } @else if (alreadyRegistered()) {
-    <div class="card bg-base-200 p-6 shadow-fsc text-center">
-      <p class="text-lg mb-4">Vous êtes déjà inscrit à ce tournoi.</p>
-      <a routerLink="/profil" class="btn btn-primary">Voir mon profil</a>
-    </div>
   } @else if (tournament()) {
     <div class="card bg-base-200 p-6 shadow-fsc mb-6">
       <h2 class="subtitle-card mb-2">{{ tournament()!.name }}</h2>
@@ -29,6 +24,10 @@
     </div>
 
     <div class="card bg-base-200 p-6 shadow-fsc">
+      @if (editMode()) {
+        <h2 class="subtitle-card mb-4">Modifier mon inscription</h2>
+      }
+
       <div class="mb-4">
         <label class="label font-semibold" for="coachPseudo">Pseudo de coach</label>
         <input
@@ -85,13 +84,36 @@
         </div>
       }
 
-      <button
-        class="btn btn-primary w-full mt-4"
-        (click)="submit()"
-        [disabled]="!form.coachPseudo || !form.teamName || !form.race"
-      >
-        S'inscrire
-      </button>
+      @if (editMode()) {
+        <div class="mb-4">
+          <label class="label font-semibold" for="rosterLink">Lien du roster</label>
+          <input
+            id="rosterLink"
+            type="url"
+            class="input input-bordered w-full"
+            [(ngModel)]="rosterLink"
+            placeholder="https://..."
+          />
+        </div>
+      }
+
+      @if (editMode()) {
+        <button
+          class="btn btn-primary w-full mt-4"
+          (click)="update()"
+          [disabled]="!form.coachPseudo || !form.teamName || !form.race"
+        >
+          Enregistrer les modifications
+        </button>
+      } @else {
+        <button
+          class="btn btn-primary w-full mt-4"
+          (click)="submit()"
+          [disabled]="!form.coachPseudo || !form.teamName || !form.race"
+        >
+          S'inscrire
+        </button>
+      }
     </div>
   }
 </div>
