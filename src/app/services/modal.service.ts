@@ -6,6 +6,7 @@ import { Injectable, signal } from '@angular/core';
 export class ModalService {
   showLogin = signal(false);
   showRegister = signal(false);
+  redirectAfterLogin = signal<string | null>(null);
 
   openLogin() {
     this.showLogin.set(true);

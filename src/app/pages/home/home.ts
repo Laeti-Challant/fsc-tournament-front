@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { EventService } from '../../services/event.service';
 import { RulesService } from '../../services/rules.service';
 import { AuthService } from '../../services/auth.service';
@@ -6,6 +6,8 @@ import { Router, RouterLink } from '@angular/router';
 import { EVENT_STATUS_LABELS, EventDetail } from '../../models/event.models';
 import { TournamentRules } from '../../models/rules.models';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { ModalService } from '../../services/modal.service';
+import { CoachService } from '../../services/coach.service';
 
 @Component({
   selector: 'app-home',
@@ -18,11 +20,32 @@ export class Home implements OnInit, OnDestroy {
   private readonly rulesService = inject(RulesService);
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly modalService = inject(ModalService);
+  private readonly coachService = inject(CoachService);
 
   event = signal<EventDetail | null>(null);
   rules = signal<TournamentRules | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
+  alreadyRegistered = signal(false);
+
+  constructor() {
+    effect(() => {
+      const isAuth = this.auth.isAuthenticated();
+      const tournament = this.event();
+
+      if (tournament) {
+        if (isAuth) {
+          this.coachService.getMyCoach(tournament.id).subscribe({
+            next: (coach) => this.alreadyRegistered.set(coach !== null),
+            error: () => this.alreadyRegistered.set(false),
+          });
+        } else {
+          this.alreadyRegistered.set(false);
+        }
+      }
+    });
+  }
 
   // Countdown
   countdown = signal({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -31,15 +54,28 @@ export class Home implements OnInit, OnDestroy {
   // Bouton inscription visible si PLANNED et utilisateur non connecté ou connecté (pas admin)
   showInscriptionButton = computed(() => {
     const e = this.event();
-    return e?.status === 'PLANNED';
+    if (!e || e.status !== 'PLANNED') return false;
+
+    const now = new Date().toISOString().split('T')[0];
+    if (now > e.registrationDeadline) return false;
+
+    return !this.alreadyRegistered();
+  });
+
+  showModifierButton = computed(() => {
+    const e = this.event();
+    return e?.status === 'PLANNED' && this.alreadyRegistered();
   });
 
   readonly statusLabels = EVENT_STATUS_LABELS;
 
   ngOnInit(): void {
+    console.log('1 - ngOnInit, isAuthenticated:', this.auth.isAuthenticated());
+
     this.eventService.getCurrent().subscribe({
       next: (event) => {
         this.event.set(event);
+        console.log('2 - event chargé, isAuthenticated:', this.auth.isAuthenticated());
         this.loading.set(false);
         this.startCountdown(event.eventDate);
         if (event.id) {
@@ -104,7 +140,8 @@ export class Home implements OnInit, OnDestroy {
     if (this.auth.isAuthenticated()) {
       this.router.navigate(['/inscription']);
     } else {
-      this.router.navigate(['/login']);
+      this.modalService.redirectAfterLogin.set('/inscription');
+      this.modalService.openLogin();
     }
   }
 }
