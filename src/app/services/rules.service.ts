@@ -11,7 +11,7 @@ export class RulesService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/tournaments`;
 
-  getByEvent(tournamentId: number): Observable<TournamentRules> {
+  getByTournament(tournamentId: number): Observable<TournamentRules> {
     return this.http.get<TournamentRules>(`${this.apiUrl}/${tournamentId}/rules`, {
       withCredentials: true,
     });

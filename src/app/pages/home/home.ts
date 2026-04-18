@@ -1,9 +1,9 @@
 import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { EventService } from '../../services/event.service';
+import { TournamentService } from '../../services/tournament.service';
 import { RulesService } from '../../services/rules.service';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import { EVENT_STATUS_LABELS, EventDetail } from '../../models/event.models';
+import { TOURNAMENT_STATUS_LABELS, TournamentDetail } from '../../models/tournament.models';
 import { TournamentRules } from '../../models/rules.models';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ModalService } from '../../services/modal.service';
@@ -16,14 +16,14 @@ import { CoachService } from '../../services/coach.service';
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
-  private readonly eventService = inject(EventService);
+  private readonly tournamentService = inject(TournamentService);
   private readonly rulesService = inject(RulesService);
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly modalService = inject(ModalService);
   private readonly coachService = inject(CoachService);
 
-  event = signal<EventDetail | null>(null);
+  tournament = signal<TournamentDetail | null>(null);
   rules = signal<TournamentRules | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -32,7 +32,7 @@ export class Home implements OnInit, OnDestroy {
   constructor() {
     effect(() => {
       const isAuth = this.auth.isAuthenticated();
-      const tournament = this.event();
+      const tournament = this.tournament();
 
       if (tournament) {
         if (isAuth) {
@@ -53,33 +53,30 @@ export class Home implements OnInit, OnDestroy {
 
   // Bouton inscription visible si PLANNED et utilisateur non connecté ou connecté (pas admin)
   showInscriptionButton = computed(() => {
-    const e = this.event();
-    if (!e || e.status !== 'PLANNED') return false;
+    const t = this.tournament();
+    if (!t || t.status !== 'PLANNED') return false;
 
     const now = new Date().toISOString().split('T')[0];
-    if (now > e.registrationDeadline) return false;
-
+    if (now > t.registrationDeadline) return false;
     return !this.alreadyRegistered();
   });
 
   showModifierButton = computed(() => {
-    const e = this.event();
-    return e?.status === 'PLANNED' && this.alreadyRegistered();
+    const t = this.tournament();
+    return t?.status === 'PLANNED' && this.alreadyRegistered();
   });
 
-  readonly statusLabels = EVENT_STATUS_LABELS;
+  readonly statusLabels = TOURNAMENT_STATUS_LABELS;
 
   ngOnInit(): void {
-    console.log('1 - ngOnInit, isAuthenticated:', this.auth.isAuthenticated());
+    this.tournamentService.getCurrent().subscribe({
+      next: (tournament) => {
+        this.tournament.set(tournament);
 
-    this.eventService.getCurrent().subscribe({
-      next: (event) => {
-        this.event.set(event);
-        console.log('2 - event chargé, isAuthenticated:', this.auth.isAuthenticated());
         this.loading.set(false);
-        this.startCountdown(event.eventDate);
-        if (event.id) {
-          this.rulesService.getByEvent(event.id).subscribe({
+        this.startCountdown(tournament.eventDate);
+        if (tournament.id) {
+          this.rulesService.getByTournament(tournament.id).subscribe({
             next: (rules) => this.rules.set(rules),
             error: () => this.rules.set(null),
           });
@@ -96,10 +93,10 @@ export class Home implements OnInit, OnDestroy {
     clearInterval(this.countdownInterval);
   }
 
-  private startCountdown(eventDateStr: string): void {
+  private startCountdown(tournamentDateStr: string): void {
     const tick = () => {
       const now = new Date().getTime();
-      const target = new Date(eventDateStr).getTime();
+      const target = new Date(tournamentDateStr).getTime();
       const diff = target - now;
 
       if (diff <= 0) {
