@@ -9,8 +9,8 @@ import {
 } from '../../models/user.models';
 import { RouterLink } from '@angular/router';
 import { CoachService } from '../../services/coach.service';
-import { EventService } from '../../services/event.service';
-import { EventDetail } from '../../models/event.models';
+import { TournamentService } from '../../services/tournament.service';
+import { TournamentDetail } from '../../models/tournament.models';
 import { CoachDetail } from '../../models/coach.models';
 
 @Component({
@@ -22,13 +22,13 @@ import { CoachDetail } from '../../models/coach.models';
 export class Profil implements OnInit {
   private userService = inject(UserService);
   private readonly coachService = inject(CoachService);
-  private readonly eventService = inject(EventService);
+  private readonly tournamentService = inject(TournamentService);
 
   user = signal<UserDTO | null>(null);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
   coach = signal<CoachDetail | null>(null);
-  tournament = signal<EventDetail | null>(null);
+  tournament = signal<TournamentDetail | null>(null);
 
   pseudoForm: UserUpdatePseudoDTO = { pseudo: '' };
 
@@ -101,20 +101,20 @@ export class Profil implements OnInit {
   }
 
   private loadInscription(): void {
-    const cached = this.eventService.currentEvent();
+    const cached = this.tournamentService.currentTournament();
     if (cached) {
       this.onTournamentLoaded(cached);
     } else {
-      this.eventService.getCurrent().subscribe({
-        next: (event) => this.onTournamentLoaded(event),
+      this.tournamentService.getCurrent().subscribe({
+        next: (tournament) => this.onTournamentLoaded(tournament),
         error: () => {}, // Pas de tournoi en cours, on n'affiche rien
       });
     }
   }
 
-  private onTournamentLoaded(event: EventDetail): void {
-    this.tournament.set(event);
-    this.coachService.getMyCoach(event.id).subscribe({
+  private onTournamentLoaded(tournament: TournamentDetail): void {
+    this.tournament.set(tournament);
+    this.coachService.getMyCoach(tournament.id).subscribe({
       next: (coach) => this.coach.set(coach),
       error: () => {}, // Pas inscrit, on n'affiche rien
     });

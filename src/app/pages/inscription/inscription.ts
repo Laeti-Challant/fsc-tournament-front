@@ -1,26 +1,26 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { EventService } from '../../services/event.service';
+import { TournamentService } from '../../services/tournament.service';
 import { CoachService } from '../../services/coach.service';
 import { RulesService } from '../../services/rules.service';
-import { Router, RouterLink } from '@angular/router';
-import { EventDetail } from '../../models/event.models';
+import { Router } from '@angular/router';
+import { TournamentDetail } from '../../models/tournament.models';
 import { RosterCategory } from '../../models/rules.models';
 import { CoachCreate, CoachUpdate } from '../../models/coach.models';
 
 @Component({
   selector: 'app-inscription',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule],
   templateUrl: './inscription.html',
   styleUrl: './inscription.css',
 })
 export class Inscription implements OnInit {
-  private readonly eventService = inject(EventService);
+  private readonly tournamentService = inject(TournamentService);
   private readonly coachService = inject(CoachService);
   private readonly rulesService = inject(RulesService);
   private readonly router = inject(Router);
 
-  tournament = signal<EventDetail | null>(null);
+  tournament = signal<TournamentDetail | null>(null);
   races = signal<RosterCategory[]>([]);
   alreadyRegistered = signal(false);
   registrationClosed = signal(false);
@@ -46,12 +46,12 @@ export class Inscription implements OnInit {
 
   private loadTournament(): void {
     // Utiliser le signal si déjà chargé, sinon appeler getCurrent
-    const cached = this.eventService.currentEvent();
+    const cached = this.tournamentService.currentTournament();
     if (cached) {
       this.onTournamentLoaded(cached);
     } else {
-      this.eventService.getCurrent().subscribe({
-        next: (event) => this.onTournamentLoaded(event),
+      this.tournamentService.getCurrent().subscribe({
+        next: (tournament) => this.onTournamentLoaded(tournament),
         error: () => {
           this.errorMessage.set('Aucun tournoi en cours.');
           this.loading.set(false);
@@ -60,24 +60,24 @@ export class Inscription implements OnInit {
     }
   }
 
-  private onTournamentLoaded(event: EventDetail): void {
-    this.tournament.set(event);
+  private onTournamentLoaded(tournament: TournamentDetail): void {
+    this.tournament.set(tournament);
 
     // Vérifier si les inscriptions sont ouvertes
     const now = new Date().toISOString().split('T')[0];
-    if (event.status !== 'PLANNED' || now > event.registrationDeadline) {
+    if (tournament.status !== 'PLANNED' || now > tournament.registrationDeadline) {
       this.registrationClosed.set(true);
       this.loading.set(false);
       return;
     }
 
     // Charger les races et vérifier l'inscription en parallèle
-    this.loadRaces(event.id);
-    this.checkExistingRegistration(event.id);
+    this.loadRaces(tournament.id);
+    this.checkExistingRegistration(tournament.id);
   }
 
   private loadRaces(tournamentId: number): void {
-    this.rulesService.getByEvent(tournamentId).subscribe({
+    this.rulesService.getByTournament(tournamentId).subscribe({
       next: (rules) => this.races.set(rules.rosterCategories),
       error: () => this.errorMessage.set('Impossible de charger les races disponibles.'),
     });
