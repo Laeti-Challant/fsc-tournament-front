@@ -3,7 +3,7 @@ import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
 import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminUsers } from './admin/admin-users/admin-users';
-import { AdminEvent } from './admin/admin-event/admin-event';
+import { AdminTournament } from './admin/admin-tournament/admin-tournament';
 import { AdminRules } from './admin/admin-rules/admin-rules';
 import { Profil } from './pages/profil/profil';
 import { Home } from './pages/home/home';
@@ -18,13 +18,13 @@ export const routes: Routes = [
     path: 'profil',
     loadComponent: () => import('./pages/profil/profil').then((c) => c.Profil),
   },
-  /*
-    {
-        path: 'inscription',
-        loadComponent: () => import('./pages/inscription/inscription').then(c => c.InscriptionComponent),
-        canActivate: [authGuard]  
-    },
-*/
+
+  {
+    path: 'inscription',
+    loadComponent: () => import('./pages/inscription/inscription').then((c) => c.Inscription),
+    canActivate: [authGuard],
+  },
+
   {
     path: 'admin',
     canActivate: [adminGuard],
@@ -38,8 +38,8 @@ export const routes: Routes = [
         component: AdminUsers,
       },
       {
-        path: 'event',
-        component: AdminEvent,
+        path: 'tournament',
+        component: AdminTournament,
       },
       {
         path: 'rules',

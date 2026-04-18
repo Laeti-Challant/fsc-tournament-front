@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EventService } from '../../services/event.service';
+import { TournamentService } from '../../services/tournament.service';
 import { RulesService } from '../../services/rules.service';
 import { Router } from '@angular/router';
-import { EventDetail } from '../../models/event.models';
+import { TournamentDetail } from '../../models/tournament.models';
 import { TournamentRules } from '../../models/rules.models';
 
 @Component({
@@ -14,12 +14,12 @@ import { TournamentRules } from '../../models/rules.models';
 })
 export class AdminRules {
   private readonly fb = inject(FormBuilder);
-  private readonly eventService = inject(EventService);
+  private readonly eventService = inject(TournamentService);
   private readonly rulesService = inject(RulesService);
   protected readonly router = inject(Router);
 
-  currentEvent = signal<EventDetail | null>(null);
-  previousEvent = signal<EventDetail | null>(null);
+  currentEvent = signal<TournamentDetail | null>(null);
+  previousEvent = signal<TournamentDetail | null>(null);
   isEditMode = signal(false);
   loading = signal(true);
   submitting = signal(false);
@@ -52,7 +52,7 @@ export class AdminRules {
     this.eventService.getCurrent().subscribe({
       next: (event) => {
         this.currentEvent.set(event);
-        this.rulesService.getByEvent(event.id!).subscribe({
+        this.rulesService.getByTournament(event.id!).subscribe({
           next: (rules) => {
             this.isEditMode.set(true);
             this.patchForm(rules);
@@ -178,11 +178,11 @@ export class AdminRules {
     this.successMessage.set(null);
 
     const dto = this.form.getRawValue();
-    const eventId = this.currentEvent()!.id!;
+    const tournamentId = this.currentEvent()!.id!;
 
     const request$ = this.isEditMode()
-      ? this.rulesService.update(eventId, dto)
-      : this.rulesService.create(eventId, dto);
+      ? this.rulesService.update(tournamentId, dto)
+      : this.rulesService.create(tournamentId, dto);
 
     request$.subscribe({
       next: () => {

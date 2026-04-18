@@ -1,21 +1,21 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { EventDetail } from '../../models/event.models';
+import { TournamentDetail } from '../../models/tournament.models';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EventService } from '../../services/event.service';
+import { TournamentService } from '../../services/tournament.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-admin-event',
+  selector: 'app-admin-tournament',
   imports: [ReactiveFormsModule],
-  templateUrl: './admin-event.html',
-  styleUrl: './admin-event.css',
+  templateUrl: './admin-tournament.html',
+  styleUrl: './admin-tournament.css',
 })
-export class AdminEvent implements OnInit {
+export class AdminTournament implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly eventService = inject(EventService);
+  private readonly tournamentService = inject(TournamentService);
   protected readonly router = inject(Router);
 
-  existingEvent = signal<EventDetail | null>(null);
+  existingTournament = signal<TournamentDetail | null>(null);
   isEditMode = signal(false);
   loading = signal(true);
   submitting = signal(false);
@@ -31,11 +31,11 @@ export class AdminEvent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.eventService.getCurrent().subscribe({
-      next: (event) => {
-        this.existingEvent.set(event);
+    this.tournamentService.getCurrent().subscribe({
+      next: (tournament) => {
+        this.existingTournament.set(tournament);
         this.isEditMode.set(true);
-        this.patchForm(event);
+        this.patchForm(tournament);
         this.loading.set(false);
       },
       error: () => {
@@ -45,13 +45,13 @@ export class AdminEvent implements OnInit {
     });
   }
 
-  private patchForm(event: EventDetail): void {
+  private patchForm(tournament: TournamentDetail): void {
     this.form.patchValue({
-      name: event.name,
-      eventDate: event.eventDate,
-      registrationDeadline: event.registrationDeadline,
-      maxParticipants: event.maxParticipants,
-      nbRounds: event.nbRounds,
+      name: tournament.name,
+      eventDate: tournament.eventDate,
+      registrationDeadline: tournament.registrationDeadline,
+      maxParticipants: tournament.maxParticipants,
+      nbRounds: tournament.nbRounds,
     });
   }
 
@@ -66,17 +66,17 @@ export class AdminEvent implements OnInit {
     this.successMessage.set(null);
 
     const dto = this.form.getRawValue() as any;
-    const event = this.existingEvent();
+    const tournament = this.existingTournament();
 
     const request$ =
-      this.isEditMode() && event
-        ? this.eventService.update(event.id, dto)
-        : this.eventService.create(dto);
+      this.isEditMode() && tournament
+        ? this.tournamentService.update(tournament.id, dto)
+        : this.tournamentService.create(dto);
 
     request$.subscribe({
       next: () => {
         this.successMessage.set(
-          this.isEditMode() ? 'Événement mis à jour avec succès.' : 'Événement créé avec succès.',
+          this.isEditMode() ? 'Tournoi mis à jour avec succès.' : 'Tournoi créé avec succès.',
         );
         this.submitting.set(false);
       },

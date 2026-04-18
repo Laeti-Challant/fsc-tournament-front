@@ -1,11 +1,13 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { EventService } from '../../services/event.service';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { TournamentService } from '../../services/tournament.service';
 import { RulesService } from '../../services/rules.service';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import { EVENT_STATUS_LABELS, EventDetail } from '../../models/event.models';
+import { TOURNAMENT_STATUS_LABELS, TournamentDetail } from '../../models/tournament.models';
 import { TournamentRules } from '../../models/rules.models';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { ModalService } from '../../services/modal.service';
+import { CoachService } from '../../services/coach.service';
 
 @Component({
   selector: 'app-home',
@@ -14,15 +16,36 @@ import { DatePipe, DecimalPipe } from '@angular/common';
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
-  private readonly eventService = inject(EventService);
+  private readonly tournamentService = inject(TournamentService);
   private readonly rulesService = inject(RulesService);
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly modalService = inject(ModalService);
+  private readonly coachService = inject(CoachService);
 
-  event = signal<EventDetail | null>(null);
+  tournament = signal<TournamentDetail | null>(null);
   rules = signal<TournamentRules | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
+  alreadyRegistered = signal(false);
+
+  constructor() {
+    effect(() => {
+      const isAuth = this.auth.isAuthenticated();
+      const tournament = this.tournament();
+
+      if (tournament) {
+        if (isAuth) {
+          this.coachService.getMyCoach(tournament.id).subscribe({
+            next: (coach) => this.alreadyRegistered.set(coach !== null),
+            error: () => this.alreadyRegistered.set(false),
+          });
+        } else {
+          this.alreadyRegistered.set(false);
+        }
+      }
+    });
+  }
 
   // Countdown
   countdown = signal({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -30,20 +53,30 @@ export class Home implements OnInit, OnDestroy {
 
   // Bouton inscription visible si PLANNED et utilisateur non connecté ou connecté (pas admin)
   showInscriptionButton = computed(() => {
-    const e = this.event();
-    return e?.status === 'PLANNED';
+    const t = this.tournament();
+    if (!t || t.status !== 'PLANNED') return false;
+
+    const now = new Date().toISOString().split('T')[0];
+    if (now > t.registrationDeadline) return false;
+    return !this.alreadyRegistered();
   });
 
-  readonly statusLabels = EVENT_STATUS_LABELS;
+  showModifierButton = computed(() => {
+    const t = this.tournament();
+    return t?.status === 'PLANNED' && this.alreadyRegistered();
+  });
+
+  readonly statusLabels = TOURNAMENT_STATUS_LABELS;
 
   ngOnInit(): void {
-    this.eventService.getCurrent().subscribe({
-      next: (event) => {
-        this.event.set(event);
+    this.tournamentService.getCurrent().subscribe({
+      next: (tournament) => {
+        this.tournament.set(tournament);
+
         this.loading.set(false);
-        this.startCountdown(event.eventDate);
-        if (event.id) {
-          this.rulesService.getByEvent(event.id).subscribe({
+        this.startCountdown(tournament.eventDate);
+        if (tournament.id) {
+          this.rulesService.getByTournament(tournament.id).subscribe({
             next: (rules) => this.rules.set(rules),
             error: () => this.rules.set(null),
           });
@@ -60,10 +93,10 @@ export class Home implements OnInit, OnDestroy {
     clearInterval(this.countdownInterval);
   }
 
-  private startCountdown(eventDateStr: string): void {
+  private startCountdown(tournamentDateStr: string): void {
     const tick = () => {
       const now = new Date().getTime();
-      const target = new Date(eventDateStr).getTime();
+      const target = new Date(tournamentDateStr).getTime();
       const diff = target - now;
 
       if (diff <= 0) {
@@ -104,7 +137,8 @@ export class Home implements OnInit, OnDestroy {
     if (this.auth.isAuthenticated()) {
       this.router.navigate(['/inscription']);
     } else {
-      this.router.navigate(['/login']);
+      this.modalService.redirectAfterLogin.set('/inscription');
+      this.modalService.openLogin();
     }
   }
 }

@@ -7,19 +7,28 @@ import {
   UserUpdatePasswordDTO,
   UserUpdatePseudoDTO,
 } from '../../models/user.models';
+import { RouterLink } from '@angular/router';
+import { CoachService } from '../../services/coach.service';
+import { TournamentService } from '../../services/tournament.service';
+import { TournamentDetail } from '../../models/tournament.models';
+import { CoachDetail } from '../../models/coach.models';
 
 @Component({
   selector: 'app-profil',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './profil.html',
   styleUrl: './profil.css',
 })
 export class Profil implements OnInit {
   private userService = inject(UserService);
+  private readonly coachService = inject(CoachService);
+  private readonly tournamentService = inject(TournamentService);
 
   user = signal<UserDTO | null>(null);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
+  coach = signal<CoachDetail | null>(null);
+  tournament = signal<TournamentDetail | null>(null);
 
   pseudoForm: UserUpdatePseudoDTO = { pseudo: '' };
 
@@ -35,6 +44,7 @@ export class Profil implements OnInit {
 
   ngOnInit(): void {
     this.loadProfile();
+    this.loadInscription();
   }
 
   loadProfile(): void {
@@ -88,5 +98,25 @@ export class Profil implements OnInit {
   private clearMessages(): void {
     this.successMessage.set(null);
     this.errorMessage.set(null);
+  }
+
+  private loadInscription(): void {
+    const cached = this.tournamentService.currentTournament();
+    if (cached) {
+      this.onTournamentLoaded(cached);
+    } else {
+      this.tournamentService.getCurrent().subscribe({
+        next: (tournament) => this.onTournamentLoaded(tournament),
+        error: () => {}, // Pas de tournoi en cours, on n'affiche rien
+      });
+    }
+  }
+
+  private onTournamentLoaded(tournament: TournamentDetail): void {
+    this.tournament.set(tournament);
+    this.coachService.getMyCoach(tournament.id).subscribe({
+      next: (coach) => this.coach.set(coach),
+      error: () => {}, // Pas inscrit, on n'affiche rien
+    });
   }
 }

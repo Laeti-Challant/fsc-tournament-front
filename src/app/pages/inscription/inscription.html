@@ -1,0 +1,119 @@
+<div class="container mx-auto p-6 max-w-2xl">
+  <h1 class="title-section text-center uppercase mb-6">Inscription au tournoi</h1>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error mb-4">{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert-success mb-4">{{ successMessage() }}</div>
+  }
+
+  @if (loading()) {
+    <div class="flex justify-center py-8">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  } @else if (registrationClosed()) {
+    <div class="card bg-base-200 p-6 shadow-fsc text-center">
+      <p class="text-lg">Les inscriptions sont fermées pour ce tournoi.</p>
+    </div>
+  } @else if (tournament()) {
+    <div class="card bg-base-200 p-6 shadow-fsc mb-6">
+      <h2 class="subtitle-card mb-2">{{ tournament()!.name }}</h2>
+      <p>Date : {{ tournament()!.eventDate }}</p>
+      <p>Places : {{ tournament()!.maxParticipants }} max</p>
+    </div>
+
+    <div class="card bg-base-200 p-6 shadow-fsc">
+      @if (editMode()) {
+        <h2 class="subtitle-card mb-4">Modifier mon inscription</h2>
+      }
+
+      <div class="mb-4">
+        <label class="label font-semibold" for="coachPseudo">Pseudo de coach</label>
+        <input
+          id="coachPseudo"
+          type="text"
+          class="input input-bordered w-full"
+          [(ngModel)]="form.coachPseudo"
+          placeholder="Votre pseudo en jeu"
+          maxlength="30"
+          required
+        />
+      </div>
+
+      <div class="mb-4">
+        <label class="label font-semibold" for="teamName">Nom d'équipe</label>
+        <input
+          id="teamName"
+          type="text"
+          class="input input-bordered w-full"
+          [(ngModel)]="form.teamName"
+          placeholder="Le nom de votre équipe"
+          maxlength="50"
+          required
+        />
+      </div>
+
+      <div class="mb-4">
+        <label class="label font-semibold" for="race">Race</label>
+        <select id="race" class="select select-bordered w-full" [(ngModel)]="form.race" required>
+          <option value="" disabled>Choisissez une race</option>
+          @for (rc of races(); track rc.id) {
+            <option [value]="rc.raceName">{{ rc.raceName }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="label cursor-pointer justify-start gap-3">
+          <input type="checkbox" class="checkbox checkbox-primary" [(ngModel)]="form.eating" />
+          <span class="font-semibold">Je mange sur place</span>
+        </label>
+      </div>
+
+      @if (form.eating) {
+        <div class="mb-4 ml-6">
+          <label class="label cursor-pointer justify-start gap-3">
+            <input
+              type="checkbox"
+              class="checkbox checkbox-primary"
+              [(ngModel)]="form.vegetarian"
+            />
+            <span class="font-semibold">Option végétarienne</span>
+          </label>
+        </div>
+      }
+
+      @if (editMode()) {
+        <div class="mb-4">
+          <label class="label font-semibold" for="rosterLink">Lien du roster</label>
+          <input
+            id="rosterLink"
+            type="url"
+            class="input input-bordered w-full"
+            [(ngModel)]="rosterLink"
+            placeholder="https://..."
+          />
+        </div>
+      }
+
+      @if (editMode()) {
+        <button
+          class="btn btn-primary w-full mt-4"
+          (click)="update()"
+          [disabled]="!form.coachPseudo || !form.teamName || !form.race"
+        >
+          Enregistrer les modifications
+        </button>
+      } @else {
+        <button
+          class="btn btn-primary w-full mt-4"
+          (click)="submit()"
+          [disabled]="!form.coachPseudo || !form.teamName || !form.race"
+        >
+          S'inscrire
+        </button>
+      }
+    </div>
+  }
+</div>

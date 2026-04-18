@@ -3,47 +3,73 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Page } from '../models/user.models';
-import { CoachDetail, CoachSummary, CoachUpdate } from '../models/coach.models';
+import {
+  CoachAdminUpdate,
+  CoachCreate,
+  CoachDetail,
+  CoachSummary,
+  CoachUpdate,
+} from '../models/coach.models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CoachService {
   private readonly http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/events`;
+  private apiUrl = `${environment.apiUrl}/tournaments`;
 
-  getAllByevent(eventId: number, page = 0, size = 20): Observable<Page<CoachSummary>> {
+  getAllByTournament(tournamentId: number, page = 0, size = 20): Observable<Page<CoachSummary>> {
     const params = new HttpParams().set('page', page).set('size', size);
-
-    return this.http.get<Page<CoachSummary>>(`${this.apiUrl}/${eventId}/coaches`, {
+    return this.http.get<Page<CoachSummary>>(`${this.apiUrl}/${tournamentId}/coaches`, {
       params,
       withCredentials: true,
     });
   }
 
-  getbyId(eventId: number, coachId: number): Observable<CoachDetail> {
-    return this.http.get<CoachDetail>(`${this.apiUrl}/${eventId}/coaches/${coachId}`, {
+  getById(tournamentId: number, coachId: number): Observable<CoachDetail> {
+    return this.http.get<CoachDetail>(`${this.apiUrl}/${tournamentId}/coaches/${coachId}`, {
       withCredentials: true,
     });
   }
 
-  getMealByEvent(eventId: number, page = 0, size = 100): Observable<Page<CoachDetail>> {
-    const params = new HttpParams().set('page', page).set('size', size);
+  getMyCoach(tournamentId: number): Observable<CoachDetail> {
+    return this.http.get<CoachDetail>(`${this.apiUrl}/${tournamentId}/coaches/me`, {
+      withCredentials: true,
+    });
+  }
 
-    return this.http.get<Page<CoachDetail>>(`${this.apiUrl}/${eventId}/coaches/meals`, {
+  getMealsByTournament(tournamentId: number, page = 0, size = 100): Observable<Page<CoachDetail>> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<Page<CoachDetail>>(`${this.apiUrl}/${tournamentId}/coaches/meals`, {
       params,
       withCredentials: true,
     });
   }
 
-  register(eventId: number, coachId: number, dto: CoachUpdate): Observable<CoachDetail> {
-    return this.http.post<CoachDetail>(`${this.apiUrl}/${eventId}/coaches/${coachId}`, dto, {
+  register(tournamentId: number, dto: CoachCreate): Observable<CoachDetail> {
+    return this.http.post<CoachDetail>(`${this.apiUrl}/${tournamentId}/coaches`, dto, {
       withCredentials: true,
     });
   }
 
-  delete(eventId: number, coachId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${eventId}/coaches/${coachId}`, {
+  updateMe(tournamentId: number, dto: CoachUpdate): Observable<CoachDetail> {
+    return this.http.put<CoachDetail>(`${this.apiUrl}/${tournamentId}/coaches/me`, dto, {
+      withCredentials: true,
+    });
+  }
+
+  adminUpdate(
+    tournamentId: number,
+    coachId: number,
+    dto: CoachAdminUpdate,
+  ): Observable<CoachDetail> {
+    return this.http.put<CoachDetail>(`${this.apiUrl}/${tournamentId}/coaches/${coachId}`, dto, {
+      withCredentials: true,
+    });
+  }
+
+  delete(tournamentId: number, coachId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${tournamentId}/coaches/${coachId}`, {
       withCredentials: true,
     });
   }

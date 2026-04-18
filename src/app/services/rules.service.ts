@@ -9,29 +9,29 @@ import { Observable } from 'rxjs';
 })
 export class RulesService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/events`;
+  private readonly apiUrl = `${environment.apiUrl}/tournaments`;
 
-  getByEvent(eventId: number): Observable<TournamentRules> {
-    return this.http.get<TournamentRules>(`${this.apiUrl}/${eventId}/rules`, {
+  getByTournament(tournamentId: number): Observable<TournamentRules> {
+    return this.http.get<TournamentRules>(`${this.apiUrl}/${tournamentId}/rules`, {
       withCredentials: true,
     });
   }
 
-  create(eventId: number, dto: TournamentRulesCreateUpdate): Observable<TournamentRules> {
-    return this.http.post<TournamentRules>(`${this.apiUrl}/${eventId}/rules`, dto, {
+  create(tournamentId: number, dto: TournamentRulesCreateUpdate): Observable<TournamentRules> {
+    return this.http.post<TournamentRules>(`${this.apiUrl}/${tournamentId}/rules`, dto, {
       withCredentials: true,
     });
   }
 
-  update(eventId: number, dto: TournamentRulesCreateUpdate): Observable<TournamentRules> {
-    return this.http.put<TournamentRules>(`${this.apiUrl}/${eventId}/rules`, dto, {
+  update(tournamentId: number, dto: TournamentRulesCreateUpdate): Observable<TournamentRules> {
+    return this.http.put<TournamentRules>(`${this.apiUrl}/${tournamentId}/rules`, dto, {
       withCredentials: true,
     });
   }
 
-  cloneFrom(targetEventId: number, sourceEventId: number): Observable<TournamentRules> {
+  cloneFrom(targettournamentId: number, sourcetournamentId: number): Observable<TournamentRules> {
     return this.http.post<TournamentRules>(
-      `${this.apiUrl}/${targetEventId}/rules/clone-from/${sourceEventId}`,
+      `${this.apiUrl}/${targettournamentId}/rules/clone-from/${sourcetournamentId}`,
       {},
       { withCredentials: true },
     );
