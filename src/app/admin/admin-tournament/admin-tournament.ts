@@ -76,7 +76,7 @@ export class AdminTournament implements OnInit {
     request$.subscribe({
       next: () => {
         this.successMessage.set(
-          this.isEditMode() ? 'Événement mis à jour avec succès.' : 'Événement créé avec succès.',
+          this.isEditMode() ? 'Tournoi mis à jour avec succès.' : 'Tournoi créé avec succès.',
         );
         this.submitting.set(false);
       },

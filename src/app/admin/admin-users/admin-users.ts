@@ -2,10 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Page, UserAdminUpdateDTO, UserDTO } from '../../models/user.models';
 import { AuthService } from '../../services/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-users',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './admin-users.html',
   styleUrl: './admin-users.css',
 })
