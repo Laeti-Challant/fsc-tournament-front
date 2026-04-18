@@ -1,29 +1,29 @@
 import { TournamentRules } from './rules.models';
 
-export type EventStatus = 'PLANNED' | 'REGISTRATION_CLOSED' | 'IN_PROGRESS' | 'FINISHED';
+export type TournamentStatus = 'PLANNED' | 'REGISTRATION_CLOSED' | 'IN_PROGRESS' | 'FINISHED';
 
-export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
+export const TOURNAMENT_STATUS_LABELS: Record<TournamentStatus, string> = {
   PLANNED: 'Planifié',
   REGISTRATION_CLOSED: 'Inscriptions fermées',
   IN_PROGRESS: 'En cours',
   FINISHED: 'Terminé',
 };
 
-export interface EventSummary {
+export interface TournamentSummary {
   id: number;
   name: string;
   eventDate: string;
-  status: EventStatus;
+  status: TournamentStatus;
 }
 
-export interface EventDetail extends EventSummary {
+export interface TournamentDetail extends TournamentSummary {
   registrationDeadline: string;
   maxParticipants: number;
   nbRounds: number;
   rules?: TournamentRules;
 }
 
-export interface EventCreateUpdate {
+export interface TournamentCreateUpdate {
   name: string;
   eventDate: string;
   registrationDeadline: string;
