@@ -68,5 +68,88 @@
         <button class="btn btn-primary" (click)="updatePassword()">Enregistrer</button>
       </div>
     </div>
+
+    <!-- Section Inscription au tournoi -->
+    @if (coach()) {
+      <div class="divider mt-8 mb-4">Mon inscription</div>
+
+      <div class="card bg-base-200 p-6 shadow-fsc mb-4">
+        <h2 class="subtitle-card mb-4">{{ tournament()!.name }}</h2>
+
+        <div class="grid grid-cols-2 gap-y-3 gap-x-4">
+          <p class="font-semibold">Pseudo coach</p>
+          <p>{{ coach()!.coachPseudo }}</p>
+
+          <p class="font-semibold">Équipe</p>
+          <p>{{ coach()!.teamName }}</p>
+
+          <p class="font-semibold">Race</p>
+          <p>{{ coach()!.race }}</p>
+
+          <p class="font-semibold">Repas sur place</p>
+          <p>{{ coach()!.eating ? 'Oui' : 'Non' }}</p>
+
+          @if (coach()!.eating) {
+            <p class="font-semibold">Végétarien</p>
+            <p>{{ coach()!.vegetarian ? 'Oui' : 'Non' }}</p>
+          }
+
+          <p class="font-semibold">Statut inscription</p>
+          <p>
+            @switch (coach()!.status) {
+              @case ('PENDING') {
+                <span class="badge badge-warning">En attente</span>
+              }
+              @case ('VALIDATED') {
+                <span class="badge badge-success">Validée</span>
+              }
+              @case ('REJECTED') {
+                <span class="badge badge-error">Refusée</span>
+              }
+            }
+          </p>
+
+          <p class="font-semibold">Statut roster</p>
+          <p>
+            @switch (coach()!.rosterStatus) {
+              @case ('NOT_SUBMITTED') {
+                <span class="badge badge-ghost">Non soumis</span>
+              }
+              @case ('SUBMITTED') {
+                <span class="badge badge-info">Soumis</span>
+              }
+              @case ('APPROVED') {
+                <span class="badge badge-success">Approuvé</span>
+              }
+              @case ('REJECTED') {
+                <span class="badge badge-error">Refusé</span>
+              }
+            }
+          </p>
+
+          @if (coach()!.rosterLink) {
+            <p class="font-semibold">Lien roster</p>
+            <p>
+              <a [href]="coach()!.rosterLink" target="_blank" class="link link-primary"
+                >Voir le roster</a
+              >
+            </p>
+          }
+        </div>
+
+        @if (tournament()!.status === 'PLANNED') {
+          <a routerLink="/inscription" class="btn btn-primary w-full mt-6">
+            Modifier mon inscription
+          </a>
+        }
+      </div>
+    } @else if (tournament() && tournament()!.status === 'PLANNED') {
+      <div class="divider mt-8 mb-4">Tournoi</div>
+
+      <div class="card bg-base-200 p-6 shadow-fsc mb-4 text-center">
+        <p class="mb-4">Vous n'êtes pas encore inscrit au {{ tournament()!.name }}.</p>
+        <a routerLink="/inscription" class="btn btn-primary">S'inscrire</a>
+      </div>
+    }
   }
 </div>

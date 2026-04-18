@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
 import { LoginDTO } from '../../models/auth.models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { LoginDTO } from '../../models/auth.models';
 export class Login {
   authService = inject(AuthService);
   modalService = inject(ModalService);
+  router = inject(Router);
 
   isOpen = input<boolean>(false);
   onClose = output<void>();
@@ -38,7 +40,12 @@ export class Login {
     this.authService.login(this.formData).subscribe({
       next: () => {
         this.isLoading.set(false);
+        const redirect = this.modalService.redirectAfterLogin();
         this.close();
+        this.modalService.redirectAfterLogin.set(null);
+        if (redirect) {
+          this.router.navigate([redirect]);
+        }
       },
       error: (err) => {
         this.isLoading.set(false);

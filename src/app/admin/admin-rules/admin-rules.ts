@@ -178,11 +178,11 @@ export class AdminRules {
     this.successMessage.set(null);
 
     const dto = this.form.getRawValue();
-    const eventId = this.currentEvent()!.id!;
+    const tournamentId = this.currentEvent()!.id!;
 
     const request$ = this.isEditMode()
-      ? this.rulesService.update(eventId, dto)
-      : this.rulesService.create(eventId, dto);
+      ? this.rulesService.update(tournamentId, dto)
+      : this.rulesService.create(tournamentId, dto);
 
     request$.subscribe({
       next: () => {
