@@ -8,6 +8,7 @@ import { TournamentRules } from '../../models/rules.models';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ModalService } from '../../services/modal.service';
 import { CoachService } from '../../services/coach.service';
+import { CoachParticipant } from '../../models/coach.models';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +29,7 @@ export class Home implements OnInit, OnDestroy {
   loading = signal(true);
   error = signal<string | null>(null);
   alreadyRegistered = signal(false);
+  latestParticipants = signal<CoachParticipant[]>([]);
 
   constructor() {
     effect(() => {
@@ -72,6 +74,11 @@ export class Home implements OnInit, OnDestroy {
     this.tournamentService.getCurrent().subscribe({
       next: (tournament) => {
         this.tournament.set(tournament);
+
+        this.coachService.getParticipants(tournament.id).subscribe({
+          next: (participants) => this.latestParticipants.set(participants.slice(-4)),
+          error: () => this.latestParticipants.set([]),
+        });
 
         this.loading.set(false);
         this.startCountdown(tournament.eventDate);

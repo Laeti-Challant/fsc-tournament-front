@@ -5,8 +5,6 @@ import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
 import { AdminUsers } from './admin/admin-users/admin-users';
 import { AdminTournament } from './admin/admin-tournament/admin-tournament';
 import { AdminRules } from './admin/admin-rules/admin-rules';
-import { Profil } from './pages/profil/profil';
-import { Home } from './pages/home/home';
 
 export const routes: Routes = [
   {
@@ -23,6 +21,10 @@ export const routes: Routes = [
     path: 'inscription',
     loadComponent: () => import('./pages/inscription/inscription').then((c) => c.Inscription),
     canActivate: [authGuard],
+  },
+  {
+    path: 'participants',
+    loadComponent: () => import('./pages/participants/participants').then((c) => c.Participants),
   },
 
   {
@@ -44,6 +46,10 @@ export const routes: Routes = [
       {
         path: 'rules',
         component: AdminRules,
+      },
+      {
+        path: 'meals',
+        loadComponent: () => import('./admin/admin-meals/admin-meals').then((c) => c.AdminMeals),
       },
       {
         path: '',
