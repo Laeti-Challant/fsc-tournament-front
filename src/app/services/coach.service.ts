@@ -7,6 +7,8 @@ import {
   CoachAdminUpdate,
   CoachCreate,
   CoachDetail,
+  CoachMeal,
+  CoachParticipant,
   CoachSummary,
   CoachUpdate,
 } from '../models/coach.models';
@@ -38,10 +40,15 @@ export class CoachService {
     });
   }
 
-  getMealsByTournament(tournamentId: number, page = 0, size = 100): Observable<Page<CoachDetail>> {
-    const params = new HttpParams().set('page', page).set('size', size);
-    return this.http.get<Page<CoachDetail>>(`${this.apiUrl}/${tournamentId}/coaches/meals`, {
-      params,
+  getParticipants(tournamentId: number): Observable<CoachParticipant[]> {
+    return this.http.get<CoachParticipant[]>(
+      `${this.apiUrl}/${tournamentId}/coaches/participants`,
+      { withCredentials: true },
+    );
+  }
+
+  getMealsByTournament(tournamentId: number): Observable<CoachMeal[]> {
+    return this.http.get<CoachMeal[]>(`${this.apiUrl}/${tournamentId}/coaches/meals`, {
       withCredentials: true,
     });
   }
