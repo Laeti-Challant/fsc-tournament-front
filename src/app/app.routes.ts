@@ -51,6 +51,10 @@ export const routes: Routes = [
           import('./admin/admin-inscriptions/admin-inscriptions').then((c) => c.AdminInscriptions),
       },
       {
+        path: 'menus',
+        loadComponent: () => import('./admin/admin-menus/admin-menus').then((c) => c.AdminMenus),
+      },
+      {
         path: 'meals',
         loadComponent: () => import('./admin/admin-meals/admin-meals').then((c) => c.AdminMeals),
       },
