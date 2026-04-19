@@ -3,10 +3,11 @@ import { CoachService } from '../../services/coach.service';
 import { TournamentService } from '../../services/tournament.service';
 import { TournamentDetail } from '../../models/tournament.models';
 import { CoachSummary } from '../../models/coach.models';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-inscriptions',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './admin-inscriptions.html',
   styleUrl: './admin-inscriptions.css',
 })

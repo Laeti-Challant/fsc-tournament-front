@@ -9,6 +9,8 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { ModalService } from '../../services/modal.service';
 import { CoachService } from '../../services/coach.service';
 import { CoachParticipant } from '../../models/coach.models';
+import { MenuService } from '../../services/menu.service';
+import { Menu } from '../../models/menu.models';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +25,7 @@ export class Home implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly modalService = inject(ModalService);
   private readonly coachService = inject(CoachService);
+  private readonly menuService = inject(MenuService);
 
   tournament = signal<TournamentDetail | null>(null);
   rules = signal<TournamentRules | null>(null);
@@ -30,6 +33,7 @@ export class Home implements OnInit, OnDestroy {
   error = signal<string | null>(null);
   alreadyRegistered = signal(false);
   latestParticipants = signal<CoachParticipant[]>([]);
+  menus = signal<Menu[]>([]);
 
   constructor() {
     effect(() => {
@@ -86,6 +90,10 @@ export class Home implements OnInit, OnDestroy {
           this.rulesService.getByTournament(tournament.id).subscribe({
             next: (rules) => this.rules.set(rules),
             error: () => this.rules.set(null),
+          });
+          this.menuService.getByTournament(tournament.id).subscribe({
+            next: (menus) => this.menus.set(menus),
+            error: () => this.menus.set([]),
           });
         }
       },

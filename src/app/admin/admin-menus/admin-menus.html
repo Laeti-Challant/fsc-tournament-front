@@ -1,0 +1,123 @@
+<div class="p-6">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-bold">Gestion des menus</h1>
+    <div class="flex gap-2">
+      @if (!showForm()) {
+        <button class="btn btn-primary btn-sm" (click)="openCreateForm()">+ Ajouter un menu</button>
+      }
+      <a routerLink="/admin/dashboard" class="btn btn-ghost btn-sm">← Retour</a>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else if (error()) {
+    <div class="alert alert-error max-w-md mx-auto mb-6">
+      <span>{{ error() }}</span>
+    </div>
+  } @else {
+    <!-- FORMULAIRE -->
+    @if (showForm()) {
+      <div class="card bg-base-200 shadow mb-8 max-w-lg mx-auto">
+        <div class="card-body">
+          <h2 class="card-title text-lg mb-4">
+            {{ editingMenu() ? 'Modifier le menu' : 'Nouveau menu' }}
+          </h2>
+
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text">Label</span>
+            </label>
+            <input
+              type="text"
+              class="input input-bordered w-full"
+              placeholder="Ex: Samedi midi"
+              [ngModel]="formLabel()"
+              (ngModelChange)="formLabel.set($event)"
+              maxlength="50"
+            />
+          </div>
+
+          <div class="form-control mb-4">
+            <label class="label">
+              <span class="label-text">Description</span>
+            </label>
+            <textarea
+              class="textarea textarea-bordered w-full"
+              placeholder="Ex: Entrée + plat + dessert"
+              rows="4"
+              [ngModel]="formDescription()"
+              (ngModelChange)="formDescription.set($event)"
+              maxlength="255"
+            ></textarea>
+          </div>
+
+          <div class="flex gap-2 justify-end">
+            <button class="btn btn-ghost btn-sm" (click)="cancelForm()">Annuler</button>
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="submitForm()"
+              [disabled]="!formLabel().trim() || actionLoading()"
+            >
+              @if (actionLoading()) {
+                <span class="loading loading-spinner loading-xs"></span>
+              } @else {
+                {{ editingMenu() ? 'Modifier' : 'Créer' }}
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- LISTE DES MENUS -->
+    @if (menus().length === 0 && !showForm()) {
+      <p class="text-center text-base-content/40 italic py-12">
+        Aucun menu configuré pour ce tournoi.
+      </p>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        @for (menu of menus(); track menu.id) {
+          <div class="card bg-base-200 shadow">
+            <div class="card-body">
+              <h3 class="card-title text-sm text-primary">{{ menu.label }}</h3>
+              @if (menu.description) {
+                <p class="whitespace-pre-line text-sm text-base-content/70 leading-relaxed">
+                  {{ menu.description }}
+                </p>
+              } @else {
+                <p class="text-base-content/40 text-xs italic">Pas de description</p>
+              }
+              <div class="card-actions justify-end mt-4">
+                <div class="flex gap-1">
+                  <button
+                    class="btn btn-xs btn-ghost"
+                    (click)="moveUp(menu)"
+                    [disabled]="menus().indexOf(menu) === 0 || actionLoading()"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    class="btn btn-xs btn-ghost"
+                    (click)="moveDown(menu)"
+                    [disabled]="menus().indexOf(menu) === menus().length - 1 || actionLoading()"
+                  >
+                    ▼
+                  </button>
+                </div>
+                <button class="btn btn-xs btn-outline" (click)="openEditForm(menu)">
+                  Modifier
+                </button>
+                <button class="btn btn-xs btn-ghost text-error" (click)="deleteMenu(menu)">
+                  Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
