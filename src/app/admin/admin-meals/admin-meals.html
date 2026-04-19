@@ -21,13 +21,13 @@
       <h1 class="title-section uppercase tracking-wide">Gestion des repas</h1>
       <div class="flex gap-2">
         <button
-          class="btn btn-primary btn-sm gap-2"
+          class="btn btn-primary btn-sm gap-2 max-w-28 md:max-w-none"
           (click)="exportExcel()"
           [disabled]="meals().length === 0"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4"
+            class="h-4 w-4 hidden md:block"
             viewBox="0 0 20 20"
             fill="currentColor"
           >

@@ -120,4 +120,54 @@ export class AdminInscriptions implements OnInit {
       },
     });
   }
+
+  exportParticipants(): void {
+    Promise.all([import('exceljs'), import('file-saver')]).then(([ExcelJS, { saveAs }]) => {
+      const validated = this.coaches().filter((c) => c.status === 'VALIDATED');
+
+      const workbook = new ExcelJS.Workbook();
+      const sheet = workbook.addWorksheet('Participants');
+
+      sheet.columns = [
+        { header: '#', key: 'num', width: 6 },
+        { header: 'Pseudo', key: 'pseudo', width: 22 },
+        { header: 'Équipe', key: 'equipe', width: 28 },
+        { header: 'Race', key: 'race', width: 22 },
+      ];
+
+      sheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFE0E0E0' },
+        };
+      });
+
+      validated.forEach((c, i) => {
+        sheet.addRow({
+          num: i + 1,
+          pseudo: c.coachPseudo,
+          equipe: c.teamName,
+          race: c.race,
+        });
+      });
+
+      // Ligne total
+      const totalRow = sheet.addRow({
+        num: '',
+        pseudo: 'TOTAL',
+        equipe: `${validated.length} participants`,
+        race: '',
+      });
+      totalRow.font = { bold: true };
+
+      workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        saveAs(blob, `participants-${this.tournament()?.name ?? 'tournoi'}.xlsx`);
+      });
+    });
+  }
 }
