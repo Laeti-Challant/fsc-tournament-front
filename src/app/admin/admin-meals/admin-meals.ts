@@ -3,10 +3,11 @@ import { CoachService } from '../../services/coach.service';
 import { TournamentService } from '../../services/tournament.service';
 import { TournamentDetail } from '../../models/tournament.models';
 import { CoachMeal } from '../../models/coach.models';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-meals',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './admin-meals.html',
   styleUrl: './admin-meals.css',
 })
