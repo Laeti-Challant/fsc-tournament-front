@@ -123,4 +123,63 @@ export class AdminMenus implements OnInit {
       },
     });
   }
+
+  moveUp(menu: Menu): void {
+    const tournamentId = this.tournament()?.id;
+    if (!tournamentId) return;
+
+    const list = this.menus();
+    const index = list.findIndex((m) => m.id === menu.id);
+    if (index <= 0) return;
+
+    const other = list[index - 1];
+    this.swapOrder(tournamentId, menu, other);
+  }
+
+  moveDown(menu: Menu): void {
+    const tournamentId = this.tournament()?.id;
+    if (!tournamentId) return;
+
+    const list = this.menus();
+    const index = list.findIndex((m) => m.id === menu.id);
+    if (index < 0 || index >= list.length - 1) return;
+
+    const other = list[index + 1];
+    this.swapOrder(tournamentId, menu, other);
+  }
+
+  private swapOrder(tournamentId: number, menuA: Menu, menuB: Menu): void {
+    this.actionLoading.set(true);
+
+    const dtoA: MenuCreateUpdate = {
+      label: menuA.label,
+      description: menuA.description,
+      displayOrder: menuB.displayOrder,
+    };
+
+    const dtoB: MenuCreateUpdate = {
+      label: menuB.label,
+      description: menuB.description,
+      displayOrder: menuA.displayOrder,
+    };
+
+    this.menuService.update(tournamentId, menuA.id, dtoA).subscribe({
+      next: () => {
+        this.menuService.update(tournamentId, menuB.id, dtoB).subscribe({
+          next: () => {
+            this.actionLoading.set(false);
+            this.loadMenus(tournamentId);
+          },
+          error: () => {
+            this.actionLoading.set(false);
+            this.error.set('Erreur lors du réordonnement.');
+          },
+        });
+      },
+      error: () => {
+        this.actionLoading.set(false);
+        this.error.set('Erreur lors du réordonnement.');
+      },
+    });
+  }
 }

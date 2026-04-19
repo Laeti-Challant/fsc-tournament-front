@@ -91,6 +91,22 @@
                 <p class="text-base-content/40 text-xs italic">Pas de description</p>
               }
               <div class="card-actions justify-end mt-4">
+                <div class="flex gap-1">
+                  <button
+                    class="btn btn-xs btn-ghost"
+                    (click)="moveUp(menu)"
+                    [disabled]="menus().indexOf(menu) === 0 || actionLoading()"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    class="btn btn-xs btn-ghost"
+                    (click)="moveDown(menu)"
+                    [disabled]="menus().indexOf(menu) === menus().length - 1 || actionLoading()"
+                  >
+                    ▼
+                  </button>
+                </div>
                 <button class="btn btn-xs btn-outline" (click)="openEditForm(menu)">
                   Modifier
                 </button>
