@@ -206,15 +206,18 @@
         Derniers participants inscrits
       </h2>
 
-      <!-- Placeholder — sera branché Feature 4 (CoachService) -->
-      <div class="grid grid-cols-2 gap-2 max-w-md mx-auto mb-8">
-        @for (i of [1, 2, 3, 4]; track i) {
-          <div class="flex justify-between text-sm text-base-content/40 italic px-2">
-            <span>pseudo</span>
-            <span>Nom du club</span>
-          </div>
-        }
-      </div>
+      @if (latestParticipants().length === 0) {
+        <p class="text-center text-base-content/40 italic">Aucun participant pour le moment.</p>
+      } @else {
+        <div class="grid grid-cols-1 gap-2 max-w-md mx-auto mb-8">
+          @for (coach of latestParticipants(); track coach.id) {
+            <div class="flex justify-between text-sm px-2 py-1">
+              <span class="font-medium">{{ coach.coachPseudo }}</span>
+              <span class="text-base-content/60">{{ coach.teamName }}</span>
+            </div>
+          }
+        </div>
+      }
 
       <div class="flex justify-center">
         <a routerLink="/participants" class="btn btn-primary btn-outline uppercase tracking-widest">

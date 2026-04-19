@@ -1,0 +1,110 @@
+<!-- LOADING -->
+@if (loading()) {
+  <div class="flex justify-center items-center min-h-[50vh]">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+}
+
+<!-- ERREUR -->
+@if (!loading() && error()) {
+  <div class="flex justify-center items-center min-h-[50vh]">
+    <div class="alert alert-error max-w-md">
+      <span>{{ error() }}</span>
+    </div>
+  </div>
+}
+
+<!-- CONTENU -->
+@if (!loading() && !error()) {
+  <section class="container mx-auto px-4 py-12">
+    <h1 class="title-section text-center uppercase tracking-wide mb-2">Participants</h1>
+
+    @if (tournament(); as t) {
+      <p class="text-center text-base-content/60 mb-8">
+        {{ t.name }} — {{ participants().length }} participant{{
+          participants().length > 1 ? 's' : ''
+        }}
+        inscrit{{ participants().length > 1 ? 's' : '' }}
+      </p>
+    }
+
+    @if (sortedParticipants().length === 0) {
+      <div class="text-center text-base-content/40 italic py-12">
+        Aucun participant inscrit pour le moment.
+      </div>
+    } @else {
+      <!-- TABLE DESKTOP -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="table table-zebra w-full">
+          <thead>
+            <tr>
+              <th class="text-center w-16">#</th>
+              <th>
+                <button class="btn btn-ghost btn-xs gap-1" (click)="toggleSort('coachPseudo')">
+                  Pseudo {{ getSortIcon('coachPseudo') }}
+                </button>
+              </th>
+              <th>
+                <button class="btn btn-ghost btn-xs gap-1" (click)="toggleSort('teamName')">
+                  Équipe {{ getSortIcon('teamName') }}
+                </button>
+              </th>
+              <th>
+                <button class="btn btn-ghost btn-xs gap-1" (click)="toggleSort('race')">
+                  Race {{ getSortIcon('race') }}
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (coach of sortedParticipants(); track coach.id; let i = $index) {
+              <tr>
+                <td class="text-center text-base-content/50">{{ i + 1 }}</td>
+                <td class="font-medium">{{ coach.coachPseudo }}</td>
+                <td>{{ coach.teamName }}</td>
+                <td>
+                  <span class="badge badge-outline badge-sm">{{ coach.race }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CARDS MOBILE -->
+      <div class="md:hidden flex flex-col gap-3">
+        <div class="flex gap-2 justify-center mb-4">
+          <button
+            class="btn btn-xs"
+            [class.btn-primary]="sortField() === 'coachPseudo'"
+            [class.btn-ghost]="sortField() !== 'coachPseudo'"
+            (click)="toggleSort('coachPseudo')"
+          >
+            Pseudo {{ getSortIcon('coachPseudo') }}
+          </button>
+          <button
+            class="btn btn-xs"
+            [class.btn-primary]="sortField() === 'race'"
+            [class.btn-ghost]="sortField() !== 'race'"
+            (click)="toggleSort('race')"
+          >
+            Race {{ getSortIcon('race') }}
+          </button>
+        </div>
+
+        @for (coach of sortedParticipants(); track coach.id; let i = $index) {
+          <div class="card bg-base-200 shadow-sm">
+            <div class="card-body p-4 flex-row items-center gap-4">
+              <span class="text-base-content/40 text-sm min-w-6 text-right">{{ i + 1 }}</span>
+              <div class="flex-1">
+                <p class="font-medium text-sm">{{ coach.coachPseudo }}</p>
+                <p class="text-xs text-base-content/60">{{ coach.teamName }}</p>
+              </div>
+              <span class="badge badge-outline badge-sm">{{ coach.race }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </section>
+}

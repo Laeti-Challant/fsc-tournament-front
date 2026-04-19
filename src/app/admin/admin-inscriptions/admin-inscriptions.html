@@ -1,0 +1,229 @@
+<div class="p-6">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-2xl font-bold">Gestion des inscriptions</h1>
+    <a routerLink="/admin/dashboard" class="btn btn-ghost btn-sm">← Retour</a>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else if (error()) {
+    <div class="alert alert-error max-w-md mx-auto">
+      <span>{{ error() }}</span>
+    </div>
+  } @else {
+    <!-- Compteurs -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <button
+        class="stat bg-base-200 rounded-lg shadow text-center cursor-pointer transition-all"
+        [class.ring-2]="activeFilter() === 'ALL'"
+        [class.ring-primary]="activeFilter() === 'ALL'"
+        (click)="setFilter('ALL')"
+      >
+        <div class="subtitle-card">Total</div>
+        <div class="stat-value text-lg">{{ coaches().length }}</div>
+      </button>
+      <button
+        class="stat bg-base-200 rounded-lg shadow text-center cursor-pointer transition-all"
+        [class.ring-2]="activeFilter() === 'PENDING'"
+        [class.ring-warning]="activeFilter() === 'PENDING'"
+        (click)="setFilter('PENDING')"
+      >
+        <div class="subtitle-card">En attente</div>
+        <div class="stat-value text-lg text-warning">{{ pendingCount() }}</div>
+      </button>
+      <button
+        class="stat bg-base-200 rounded-lg shadow text-center cursor-pointer transition-all"
+        [class.ring-2]="activeFilter() === 'VALIDATED'"
+        [class.ring-success]="activeFilter() === 'VALIDATED'"
+        (click)="setFilter('VALIDATED')"
+      >
+        <div class="subtitle-card">Validés</div>
+        <div class="stat-value text-lg text-success">{{ validatedCount() }}</div>
+      </button>
+      <button
+        class="stat bg-base-200 rounded-lg shadow text-center cursor-pointer transition-all"
+        [class.ring-2]="activeFilter() === 'REJECTED'"
+        [class.ring-error]="activeFilter() === 'REJECTED'"
+        (click)="setFilter('REJECTED')"
+      >
+        <div class="subtitle-card">Refusés</div>
+        <div class="stat-value text-lg text-error">{{ rejectedCount() }}</div>
+      </button>
+    </div>
+
+    @if (filteredCoaches().length === 0) {
+      <p class="text-center text-base-content/40 italic py-12">
+        Aucune inscription
+        @if (activeFilter() !== 'ALL') {
+          avec ce filtre
+        }
+        .
+      </p>
+    } @else {
+      <!-- Tableau desktop -->
+      <div class="hidden md:block overflow-x-auto rounded-[16px]">
+        <table class="table bg-base-200">
+          <thead>
+            <tr class="text-base-content">
+              <th>Pseudo</th>
+              <th>Équipe</th>
+              <th>Race</th>
+              <th>Statut</th>
+              <th>Roster</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (coach of filteredCoaches(); track coach.id) {
+              <tr class="hover:bg-base-300 transition-colors">
+                <td class="font-medium">{{ coach.coachPseudo }}</td>
+                <td>{{ coach.teamName }}</td>
+                <td>
+                  <span class="badge badge-outline badge-sm">{{ coach.race }}</span>
+                </td>
+                <td>
+                  @switch (coach.status) {
+                    @case ('PENDING') {
+                      <span class="badge badge-warning badge-sm">En attente</span>
+                    }
+                    @case ('VALIDATED') {
+                      <span class="badge badge-success badge-sm">Validé</span>
+                    }
+                    @case ('REJECTED') {
+                      <span class="badge badge-error badge-sm">Refusé</span>
+                    }
+                  }
+                </td>
+                <td>
+                  @switch (coach.rosterStatus) {
+                    @case ('NOT_SUBMITTED') {
+                      <span class="text-base-content/40 text-xs">Non soumis</span>
+                    }
+                    @case ('SUBMITTED') {
+                      <span class="badge badge-info badge-sm">Soumis</span>
+                    }
+                    @case ('APPROVED') {
+                      <span class="badge badge-success badge-sm">Approuvé</span>
+                    }
+                    @case ('REJECTED') {
+                      <span class="badge badge-error badge-sm">Refusé</span>
+                    }
+                  }
+                </td>
+                <td>
+                  @if (actionLoading() === coach.id) {
+                    <span class="loading loading-spinner loading-xs text-primary"></span>
+                  } @else {
+                    <div class="flex gap-1 flex-wrap">
+                      @if (coach.status !== 'VALIDATED') {
+                        <button
+                          class="btn btn-xs btn-success btn-outline"
+                          (click)="validate(coach)"
+                        >
+                          Valider
+                        </button>
+                      }
+                      @if (coach.status !== 'REJECTED') {
+                        <button class="btn btn-xs btn-error btn-outline" (click)="reject(coach)">
+                          Refuser
+                        </button>
+                      }
+                      @if (coach.status !== 'PENDING') {
+                        <button
+                          class="btn btn-xs btn-warning btn-outline"
+                          (click)="setPending(coach)"
+                        >
+                          → Attente
+                        </button>
+                      }
+                      <button class="btn btn-xs btn-ghost text-error" (click)="deleteCoach(coach)">
+                        🗑️
+                      </button>
+                    </div>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Cards mobile -->
+      <div class="md:hidden flex flex-col gap-3">
+        @for (coach of filteredCoaches(); track coach.id) {
+          <div class="card bg-base-200 shadow-sm">
+            <div class="card-body p-4">
+              <div class="flex items-center justify-between mb-2">
+                <div>
+                  <p class="font-medium">{{ coach.coachPseudo }}</p>
+                  <p class="text-xs text-base-content/60">{{ coach.teamName }}</p>
+                </div>
+                <span class="badge badge-outline badge-sm">{{ coach.race }}</span>
+              </div>
+
+              <div class="flex gap-2 mb-3">
+                @switch (coach.status) {
+                  @case ('PENDING') {
+                    <span class="badge badge-warning badge-sm">En attente</span>
+                  }
+                  @case ('VALIDATED') {
+                    <span class="badge badge-success badge-sm">Validé</span>
+                  }
+                  @case ('REJECTED') {
+                    <span class="badge badge-error badge-sm">Refusé</span>
+                  }
+                }
+                @switch (coach.rosterStatus) {
+                  @case ('SUBMITTED') {
+                    <span class="badge badge-info badge-sm">Roster soumis</span>
+                  }
+                  @case ('APPROVED') {
+                    <span class="badge badge-success badge-sm">Roster OK</span>
+                  }
+                  @case ('REJECTED') {
+                    <span class="badge badge-error badge-sm">Roster refusé</span>
+                  }
+                }
+              </div>
+
+              @if (actionLoading() === coach.id) {
+                <div class="flex justify-center">
+                  <span class="loading loading-spinner loading-xs text-primary"></span>
+                </div>
+              } @else {
+                <div class="flex gap-2 flex-wrap">
+                  @if (coach.status !== 'VALIDATED') {
+                    <button
+                      class="btn btn-xs btn-success btn-outline flex-1"
+                      (click)="validate(coach)"
+                    >
+                      Valider
+                    </button>
+                  }
+                  @if (coach.status !== 'REJECTED') {
+                    <button class="btn btn-xs btn-error btn-outline flex-1" (click)="reject(coach)">
+                      Refuser
+                    </button>
+                  }
+                  @if (coach.status !== 'PENDING') {
+                    <button
+                      class="btn btn-xs btn-warning btn-outline flex-1"
+                      (click)="setPending(coach)"
+                    >
+                      → Attente
+                    </button>
+                  }
+                  <button class="btn btn-xs btn-ghost text-error" (click)="deleteCoach(coach)">
+                    🗑️
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
