@@ -28,7 +28,7 @@
       </div>
     </a>
 
-    <!-- Carte Événement  -->
+    <!-- Carte Événement -->
     <a
       routerLink="/admin/tournament"
       class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
@@ -45,19 +45,62 @@
       </div>
     </a>
 
-    <!-- Carte Inscriptions (TODO) -->
-    <div class="card bg-base-200 opacity-50 cursor-not-allowed">
+    <!-- Carte Inscriptions -->
+    <a
+      routerLink="/admin/inscriptions"
+      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+    >
       <div class="card-body">
         <div class="flex items-center justify-between mb-2">
           <h2 class="card-title text-lg">Inscriptions</h2>
           <span class="text-3xl">📋</span>
         </div>
-        <p class="text-neutral-content text-sm">Disponible prochainement</p>
+
+        @if (isLoading()) {
+          <span class="loading loading-spinner loading-sm text-primary"></span>
+        } @else {
+          <div class="flex gap-4 items-baseline">
+            <p class="text-4xl font-bold text-primary">{{ validatedCount() }}</p>
+            <p class="text-neutral-content text-sm">validés</p>
+          </div>
+          @if (pendingCount() > 0) {
+            <div class="mt-1">
+              <span class="badge badge-warning badge-sm">{{ pendingCount() }} en attente</span>
+            </div>
+          }
+        }
+
         <div class="card-actions justify-end mt-4">
-          <span class="badge badge-neutral">Feature 4</span>
+          <span class="text-primary text-sm">Gérer →</span>
         </div>
       </div>
-    </div>
+    </a>
+
+    <!-- Carte Repas -->
+    <a
+      routerLink="/admin/meals"
+      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+    >
+      <div class="card-body">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="card-title text-lg">Repas</h2>
+          <span class="text-3xl">🍽️</span>
+        </div>
+
+        @if (isLoading()) {
+          <span class="loading loading-spinner loading-sm text-primary"></span>
+        } @else {
+          <p class="text-4xl font-bold text-primary">{{ totalMeals() }}</p>
+          <p class="text-neutral-content text-sm">
+            repas dont {{ vegetarianMeals() }} végétarien{{ vegetarianMeals() > 1 ? 's' : '' }}
+          </p>
+        }
+
+        <div class="card-actions justify-end mt-4">
+          <span class="text-primary text-sm">Gérer →</span>
+        </div>
+      </div>
+    </a>
 
     <!-- Carte Rounds (TODO) -->
     <div class="card bg-base-200 opacity-50 cursor-not-allowed">
@@ -68,21 +111,7 @@
         </div>
         <p class="text-neutral-content text-sm">Disponible prochainement</p>
         <div class="card-actions justify-end mt-4">
-          <span class="badge badge-neutral">Feature 6</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Carte Repas (TODO) -->
-    <div class="card bg-base-200 opacity-50 cursor-not-allowed">
-      <div class="card-body">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="card-title text-lg">Repas</h2>
-          <span class="text-3xl">🍽️</span>
-        </div>
-        <p class="text-neutral-content text-sm">Disponible prochainement</p>
-        <div class="card-actions justify-end mt-4">
-          <span class="badge badge-neutral">Feature 5</span>
+          <span class="badge badge-neutral">Feature 7</span>
         </div>
       </div>
     </div>
