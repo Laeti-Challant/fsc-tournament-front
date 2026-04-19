@@ -1,12 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
-import { AdminDashboard } from './admin/admin-dashboard/admin-dashboard';
-import { AdminUsers } from './admin/admin-users/admin-users';
-import { AdminTournament } from './admin/admin-tournament/admin-tournament';
-import { AdminRules } from './admin/admin-rules/admin-rules';
-import { Profil } from './pages/profil/profil';
-import { Home } from './pages/home/home';
 
 export const routes: Routes = [
   {
@@ -24,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/inscription/inscription').then((c) => c.Inscription),
     canActivate: [authGuard],
   },
+  {
+    path: 'participants',
+    loadComponent: () => import('./pages/participants/participants').then((c) => c.Participants),
+  },
 
   {
     path: 'admin',
@@ -31,19 +29,34 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: AdminDashboard,
+        loadComponent: () =>
+          import('./admin/admin-dashboard/admin-dashboard').then((c) => c.AdminDashboard),
       },
       {
         path: 'users',
-        component: AdminUsers,
+        loadComponent: () => import('./admin/admin-users/admin-users').then((c) => c.AdminUsers),
       },
       {
         path: 'tournament',
-        component: AdminTournament,
+        loadComponent: () =>
+          import('./admin/admin-tournament/admin-tournament').then((c) => c.AdminTournament),
       },
       {
         path: 'rules',
-        component: AdminRules,
+        loadComponent: () => import('./admin/admin-rules/admin-rules').then((c) => c.AdminRules),
+      },
+      {
+        path: 'inscriptions',
+        loadComponent: () =>
+          import('./admin/admin-inscriptions/admin-inscriptions').then((c) => c.AdminInscriptions),
+      },
+      {
+        path: 'menus',
+        loadComponent: () => import('./admin/admin-menus/admin-menus').then((c) => c.AdminMenus),
+      },
+      {
+        path: 'meals',
+        loadComponent: () => import('./admin/admin-meals/admin-meals').then((c) => c.AdminMeals),
       },
       {
         path: '',

@@ -52,3 +52,20 @@ export interface CoachAdminUpdate {
   rosterStatus: RosterStatus;
   substitute: boolean;
 }
+
+// Page participants publique - CoachParticipantDTO
+export interface CoachParticipant {
+  id: number;
+  coachPseudo: string;
+  teamName: string;
+  race: string;
+}
+
+// Page admin repas - CoachMealDTO
+export interface CoachMeal {
+  id: number;
+  coachPseudo: string;
+  teamName: string;
+  race: string;
+  vegetarian: boolean;
+}

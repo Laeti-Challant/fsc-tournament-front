@@ -1,0 +1,102 @@
+<!-- LOADING -->
+@if (loading()) {
+  <div class="flex justify-center items-center min-h-[50vh]">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+}
+
+<!-- ERREUR -->
+@if (!loading() && error()) {
+  <div class="flex justify-center items-center min-h-[50vh]">
+    <div class="alert alert-error max-w-md">
+      <span>{{ error() }}</span>
+    </div>
+  </div>
+}
+
+<!-- CONTENU -->
+@if (!loading() && !error()) {
+  <section class="container mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+      <h1 class="title-section uppercase tracking-wide">Gestion des repas</h1>
+      <div class="flex gap-2">
+        <button
+          class="btn btn-primary btn-sm gap-2 max-w-28 md:max-w-none"
+          (click)="exportExcel()"
+          [disabled]="meals().length === 0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 hidden md:block"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Exporter Excel
+        </button>
+        <a routerLink="/admin/dashboard" class="btn btn-ghost btn-sm">← Retour</a>
+      </div>
+    </div>
+
+    <!-- COMPTEURS -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="stat bg-base-200 rounded-lg shadow text-center">
+        <div class="subtitle-card">Total repas</div>
+        <div class="stat-value text-lg text-primary">{{ totalMeals() }}</div>
+      </div>
+      <div class="stat bg-base-200 rounded-lg shadow text-center">
+        <div class="subtitle-card">Végétariens</div>
+        <div class="stat-value text-lg text-success">{{ totalVegetarian() }}</div>
+      </div>
+      <div class="stat bg-base-200 rounded-lg shadow text-center">
+        <div class="subtitle-card">Non végétariens</div>
+        <div class="stat-value text-lg">{{ totalNonVegetarian() }}</div>
+      </div>
+    </div>
+
+    @if (meals().length === 0) {
+      <div class="text-center text-base-content/40 italic py-12">
+        Aucun participant ne mange sur place pour le moment.
+      </div>
+    } @else {
+      <!-- TABLE -->
+      <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+          <thead>
+            <tr>
+              <th class="text-center w-16">#</th>
+              <th>Pseudo</th>
+              <th>Équipe</th>
+              <th>Race</th>
+              <th class="text-center">Végétarien</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (meal of meals(); track meal.id; let i = $index) {
+              <tr>
+                <td class="text-center text-base-content/50">{{ i + 1 }}</td>
+                <td class="font-medium">{{ meal.coachPseudo }}</td>
+                <td>{{ meal.teamName }}</td>
+                <td>
+                  <span class="badge badge-outline badge-sm">{{ meal.race }}</span>
+                </td>
+                <td class="text-center">
+                  @if (meal.vegetarian) {
+                    <span class="badge badge-success badge-sm">Végé</span>
+                  } @else {
+                    <span class="text-base-content/40">—</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+}
