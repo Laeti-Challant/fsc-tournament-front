@@ -1,1 +1,76 @@
-<p>admin-rounds works!</p>
+<div class="container mx-auto px-4 py-10">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="title-section">Gestion des rounds</h1>
+    <a routerLink="/admin/dashboard" class="btn btn-ghost btn-sm">← Retour</a>
+  </div>
+
+  <!-- Messages -->
+  @if (errorMessage()) {
+    <div class="alert alert-error mb-6">
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success mb-6">
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  <!-- Chargement -->
+  @if (isLoading()) {
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else {
+    <!-- Aucun round généré -->
+    @if (rounds().length === 0) {
+      <div class="card bg-base-200 shadow-fsc">
+        <div class="card-body items-center text-center py-12">
+          <span class="text-5xl mb-4">⚔️</span>
+          <h2 class="title-card mb-2">Aucun round généré</h2>
+          <p class="text-neutral-content mb-6">
+            Les rounds seront générés automatiquement selon le nombre défini dans le tournoi.
+          </p>
+          <button class="btn btn-primary" [disabled]="isGenerating()" (click)="generateRounds()">
+            @if (isGenerating()) {
+              <span class="loading loading-spinner loading-sm"></span>
+              Génération en cours...
+            } @else {
+              ⚔️ Générer les rounds
+            }
+          </button>
+        </div>
+      </div>
+
+      <!-- Liste des rounds -->
+    } @else {
+      <div class="flex flex-col gap-8">
+        @for (round of rounds(); track round.id) {
+          <a
+            [routerLink]="['/admin/rounds', round.id]"
+            class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+          >
+            <div class="card-body flex-row items-center justify-between py-4">
+              <div class="flex items-center gap-4">
+                <span class="text-3xl font-bold text-primary">{{ round.roundNumber }}</span>
+                <div>
+                  <h2 class="title-card">Round {{ round.roundNumber }}</h2>
+                  <p class="text-neutral-content text-sm">
+                    Appariement : {{ round.pairingType === 'RANDOM' ? 'Aléatoire' : 'Swiss' }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <span class="badge {{ statusBadgeClass(round.status) }}">
+                  {{ statusLabel(round.status) }}
+                </span>
+                <span class="text-primary">→</span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  }
+</div>
