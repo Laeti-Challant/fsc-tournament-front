@@ -62,11 +62,11 @@ export const routes: Routes = [
         path: 'rounds',
         loadComponent: () => import('./admin/admin-rounds/admin-rounds').then((c) => c.AdminRounds),
       },
-      // {
-      //   path: 'rounds/:id',
-      //   loadComponent: () =>
-      //     import('./admin/admin-round-detail/admin-round-detail').then((c) => c.AdminRoundDetail),
-      // },
+      {
+        path: 'rounds/:id',
+        loadComponent: () =>
+          import('./admin/admin-round-detail/admin-round-detail').then((c) => c.AdminRoundDetail),
+      },
       {
         path: '',
         redirectTo: 'dashboard',
