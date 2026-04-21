@@ -68,6 +68,11 @@ export const routes: Routes = [
           import('./admin/admin-round-detail/admin-round-detail').then((c) => c.AdminRoundDetail),
       },
       {
+        path: 'rounds/:roundId/matches/:matchId',
+        loadComponent: () =>
+          import('./admin/admin-match-result/admin-match-result').then((c) => c.AdminMatchResult),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

@@ -1,0 +1,277 @@
+<div class="container mx-auto px-4 py-10">
+  <!-- En-tête -->
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="title-section">Saisie du résultat</h1>
+    <button class="btn btn-ghost btn-sm" (click)="goBack()">← Retour au round</button>
+  </div>
+
+  <!-- Messages -->
+  @if (errorMessage()) {
+    <div class="alert alert-error mb-6">
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert-success mb-6">
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  <!-- Chargement -->
+  @if (isLoading()) {
+    <div class="flex justify-center py-12">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  } @else {
+    <!-- En-tête du match -->
+    @if (match()) {
+      <div class="card bg-base-200 shadow-fsc mb-8">
+        <div class="card-body">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <!-- Coach 1 -->
+            <div class="text-center flex-1">
+              <div class="font-bold text-lg">{{ match()!.coach1.coachPseudo }}</div>
+              <div class="text-neutral-content text-sm">{{ match()!.coach1.teamName }}</div>
+              <div class="text-neutral-content text-xs">{{ match()!.coach1.race }}</div>
+              @if (hasResults() && !isEditMode()) {
+                <span
+                  class="badge {{ resultBadgeClass(existingResults()[0].result) }} badge-lg mt-2"
+                >
+                  {{ resultLabel(existingResults()[0].result) }}
+                </span>
+              }
+            </div>
+
+            <div class="text-primary font-bold text-2xl">⚔</div>
+
+            <!-- Coach 2 -->
+            <div class="text-center flex-1">
+              <div class="font-bold text-lg">{{ match()!.coach2.coachPseudo }}</div>
+              <div class="text-neutral-content text-sm">{{ match()!.coach2.teamName }}</div>
+              <div class="text-neutral-content text-xs">{{ match()!.coach2.race }}</div>
+              @if (hasResults() && !isEditMode()) {
+                <span
+                  class="badge {{ resultBadgeClass(existingResults()[1].result) }} badge-lg mt-2"
+                >
+                  {{ resultLabel(existingResults()[1].result) }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Mode lecture — résultats déjà saisis -->
+    @if (hasResults() && !isEditMode()) {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        @for (result of existingResults(); track result.id) {
+          <div class="card bg-base-200 shadow-fsc">
+            <div class="card-body">
+              <h2 class="title-card mb-4">{{ result.coach.coachPseudo }}</h2>
+              <div class="grid grid-cols-2 gap-2 text-sm">
+                <span class="text-neutral-content">Touchdowns</span>
+                <span class="font-semibold">{{ result.touchdowns }}</span>
+                <span class="text-neutral-content">Éliminations</span>
+                <span class="font-semibold">{{ result.casualties }}</span>
+                <span class="text-neutral-content">Objectifs</span>
+                <span class="font-semibold">{{ result.objectives }}</span>
+                <span class="text-neutral-content">Bonus objectif</span>
+                <span class="font-semibold">{{ result.bonusObjective ? 'Oui' : 'Non' }}</span>
+                <span class="text-neutral-content">Passes</span>
+                <span class="font-semibold">{{ result.passes }}</span>
+                <span class="text-neutral-content">Actions fautes</span>
+                <span class="font-semibold">{{ result.foulActions }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <button class="btn btn-warning btn-sm" (click)="enableEdit()">✏ Modifier le résultat</button>
+    } @else {
+      <!-- Formulaire de saisie -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Coach 1 -->
+        <div class="card bg-base-200 shadow-fsc">
+          <div class="card-body">
+            <h2 class="title-card mb-4">{{ match()?.coach1?.coachPseudo }}</h2>
+
+            <!-- Résultat -->
+            <div class="form-control mb-4">
+              <label class="label">
+                <span class="label-text font-semibold">Résultat</span>
+              </label>
+              <select
+                class="select select-bordered"
+                [ngModel]="result1()"
+                (ngModelChange)="result1.set($event)"
+              >
+                <option value="WIN">Victoire</option>
+                <option value="LOSS">Défaite</option>
+                <option value="DRAW">Match nul</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="form-control">
+                <label class="label"><span class="label-text">Touchdowns</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="touchdowns1()"
+                  (ngModelChange)="touchdowns1.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Éliminations</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="casualties1()"
+                  (ngModelChange)="casualties1.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Objectifs</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="objectives1()"
+                  (ngModelChange)="objectives1.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Passes</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="passes1()"
+                  (ngModelChange)="passes1.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Actions fautes</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="foulActions1()"
+                  (ngModelChange)="foulActions1.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Bonus objectif</span></label>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-primary mt-3"
+                  [ngModel]="bonusObjective1()"
+                  (ngModelChange)="bonusObjective1.set($event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coach 2 -->
+        <div class="card bg-base-200 shadow-fsc">
+          <div class="card-body">
+            <h2 class="title-card mb-4">{{ match()?.coach2?.coachPseudo }}</h2>
+
+            <!-- Résultat calculé automatiquement -->
+            <div class="form-control mb-4">
+              <label class="label">
+                <span class="label-text font-semibold">Résultat</span>
+                <span class="label-text-alt text-neutral-content">calculé automatiquement</span>
+              </label>
+              <div class="input input-bordered flex items-center">
+                <span class="badge {{ resultBadgeClass(result2()) }}">
+                  {{ resultLabel(result2()) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="form-control">
+                <label class="label"><span class="label-text">Touchdowns</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="touchdowns2()"
+                  (ngModelChange)="touchdowns2.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Éliminations</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="casualties2()"
+                  (ngModelChange)="casualties2.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Objectifs</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="objectives2()"
+                  (ngModelChange)="objectives2.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Passes</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="passes2()"
+                  (ngModelChange)="passes2.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Actions fautes</span></label>
+                <input
+                  type="number"
+                  class="input input-bordered"
+                  min="0"
+                  [ngModel]="foulActions2()"
+                  (ngModelChange)="foulActions2.set(+$event)"
+                />
+              </div>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Bonus objectif</span></label>
+                <input
+                  type="checkbox"
+                  class="toggle toggle-primary mt-3"
+                  [ngModel]="bonusObjective2()"
+                  (ngModelChange)="bonusObjective2.set($event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3">
+        <button class="btn btn-primary" [disabled]="isSubmitting()" (click)="submit()">
+          @if (isSubmitting()) {
+            <span class="loading loading-spinner loading-sm"></span>
+            Enregistrement...
+          } @else {
+            ✓ Valider le résultat
+          }
+        </button>
+        <button class="btn btn-ghost" (click)="goBack()">Annuler</button>
+      </div>
+    }
+  }
+</div>
