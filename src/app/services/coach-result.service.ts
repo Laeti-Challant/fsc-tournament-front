@@ -16,7 +16,9 @@ export class CoachResultService {
   }
 
   getByMatch(eventId: number, roundId: number, matchId: number): Observable<CoachResult[]> {
-    return this.http.get<CoachResult[]>(this.url(eventId, roundId, matchId));
+    return this.http.get<CoachResult[]>(this.url(eventId, roundId, matchId), {
+      withCredentials: true,
+    });
   }
 
   create(
@@ -25,7 +27,9 @@ export class CoachResultService {
     matchId: number,
     dto: MatchResultCreate,
   ): Observable<CoachResult[]> {
-    return this.http.post<CoachResult[]>(this.url(eventId, roundId, matchId), dto);
+    return this.http.post<CoachResult[]>(this.url(eventId, roundId, matchId), dto, {
+      withCredentials: true,
+    });
   }
 
   update(
@@ -34,6 +38,8 @@ export class CoachResultService {
     matchId: number,
     dto: MatchResultCreate,
   ): Observable<CoachResult[]> {
-    return this.http.put<CoachResult[]>(this.url(eventId, roundId, matchId), dto);
+    return this.http.put<CoachResult[]>(this.url(eventId, roundId, matchId), dto, {
+      withCredentials: true,
+    });
   }
 }
