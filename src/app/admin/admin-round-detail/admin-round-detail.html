@@ -185,8 +185,12 @@
                       </span>
                     </td>
                     <td class="text-center">
-                      <!-- Feature 8 : bouton saisie résultat -->
-                      <button class="btn btn-ghost btn-xs" disabled>Résultat →</button>
+                      <a
+                        [routerLink]="['/admin/rounds', roundId(), 'matches', match.id]"
+                        class="btn btn-ghost btn-xs"
+                      >
+                        {{ match.status === 'FINISHED' ? '✏ Résultat' : 'Saisir →' }}
+                      </a>
                     </td>
                   </tr>
                 }

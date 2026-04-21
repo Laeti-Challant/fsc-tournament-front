@@ -1,5 +1,5 @@
 import { MatchResult } from './match.models';
-import { CoachParticipant } from './coach.models';
+import { CoachSummary } from './coach.models';
 
 export interface CoachResult {
   id: number;
@@ -10,7 +10,7 @@ export interface CoachResult {
   bonusObjective: boolean;
   passes: number;
   foulActions: number;
-  coach: CoachParticipant;
+  coach: CoachSummary;
 }
 
 export interface CoachResultCreate {
