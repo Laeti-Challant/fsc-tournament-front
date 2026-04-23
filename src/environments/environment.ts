@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  apiUrl: 'https://fsc-tournament-back.onrender.com/filsanguinairecholetais',
+  production: false,
+  apiUrl: 'http://localhost:80/api',
 };
