@@ -28,6 +28,10 @@ export class AdminTournament implements OnInit {
     registrationDeadline: ['', Validators.required],
     maxParticipants: [24, [Validators.required, Validators.min(2)]],
     nbRounds: [3, [Validators.required, Validators.min(1)]],
+    location: [''],
+    address: [''],
+    postalCode: ['', [Validators.pattern('^[0-9]{5}$')]],
+    city: [''],
   });
 
   ngOnInit(): void {

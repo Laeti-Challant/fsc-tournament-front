@@ -113,6 +113,53 @@
             </fieldset>
           </div>
 
+          <!-- Lieu -->
+          <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">Lieu / Salle</legend>
+            <input
+              type="text"
+              class="input input-bordered w-full"
+              formControlName="location"
+              placeholder="ex: Salle des sports de Cholet"
+            />
+          </fieldset>
+
+          <!-- Adresse + Code postal + Ville -->
+          <fieldset class="fieldset mb-4">
+            <legend class="fieldset-legend">Adresse</legend>
+            <input
+              type="text"
+              class="input input-bordered w-full mb-2"
+              formControlName="address"
+              placeholder="ex: 12 rue de la Paix"
+            />
+            <div class="grid grid-cols-3 gap-3">
+              <div class="col-span-1">
+                <input
+                  type="text"
+                  class="input input-bordered w-full"
+                  [class.input-error]="
+                    form.controls.postalCode.invalid && form.controls.postalCode.touched
+                  "
+                  formControlName="postalCode"
+                  placeholder="ex: 49300"
+                  maxlength="5"
+                />
+                @if (form.controls.postalCode.invalid && form.controls.postalCode.touched) {
+                  <p class="text-error mt-1">Code postal invalide.</p>
+                }
+              </div>
+              <div class="col-span-2">
+                <input
+                  type="text"
+                  class="input input-bordered w-full"
+                  formControlName="city"
+                  placeholder="ex: Cholet"
+                />
+              </div>
+            </div>
+          </fieldset>
+
           <!-- Boutons -->
           <div class="flex justify-end gap-3">
             <button
