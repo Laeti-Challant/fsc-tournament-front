@@ -2,7 +2,7 @@ import { computed, Injectable, signal } from '@angular/core';
 import { AuthResponseDTO, LoginDTO, RegisterDTO } from '../models/auth.models';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, tap } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
