@@ -37,38 +37,48 @@ export const routes: Routes = [
         loadComponent: () => import('./admin/admin-users/admin-users').then((c) => c.AdminUsers),
       },
       {
-        path: 'tournament',
+        path: 'tournament/new',
         loadComponent: () =>
           import('./admin/admin-tournament/admin-tournament').then((c) => c.AdminTournament),
       },
       {
-        path: 'rules',
+        path: 'tournament/:id',
+        loadComponent: () =>
+          import('./admin/admin-tournament/admin-tournament').then((c) => c.AdminTournament),
+      },
+      {
+        path: 'tournament',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'rules/:tournamentId',
         loadComponent: () => import('./admin/admin-rules/admin-rules').then((c) => c.AdminRules),
       },
       {
-        path: 'inscriptions',
+        path: 'inscriptions/:tournamentId',
         loadComponent: () =>
           import('./admin/admin-inscriptions/admin-inscriptions').then((c) => c.AdminInscriptions),
       },
       {
-        path: 'menus',
+        path: 'menus/:tournamentId',
         loadComponent: () => import('./admin/admin-menus/admin-menus').then((c) => c.AdminMenus),
       },
       {
-        path: 'meals',
+        path: 'meals/:tournamentId',
         loadComponent: () => import('./admin/admin-meals/admin-meals').then((c) => c.AdminMeals),
       },
       {
-        path: 'rounds',
+        path: 'rounds/:tournamentId',
         loadComponent: () => import('./admin/admin-rounds/admin-rounds').then((c) => c.AdminRounds),
       },
       {
-        path: 'rounds/:id',
+        path: 'rounds/:tournamentId/detail/:id',
         loadComponent: () =>
           import('./admin/admin-round-detail/admin-round-detail').then((c) => c.AdminRoundDetail),
       },
       {
-        path: 'rounds/:roundId/matches/:matchId',
+        path: 'rounds/:tournamentId/matches/:matchId',
         loadComponent: () =>
           import('./admin/admin-match-result/admin-match-result').then((c) => c.AdminMatchResult),
       },
