@@ -101,13 +101,16 @@ export class Profil implements OnInit {
   }
 
   private loadInscription(): void {
-    const cached = this.tournamentService.currentTournament();
+    const cached = this.tournamentService.selectedTournament();
     if (cached) {
       this.onTournamentLoaded(cached);
     } else {
-      this.tournamentService.getCurrent().subscribe({
-        next: (tournament) => this.onTournamentLoaded(tournament),
-        error: () => {}, // Pas de tournoi en cours, on n'affiche rien
+      this.tournamentService.loadActive().subscribe({
+        next: () => {
+          const tournament = this.tournamentService.selectedTournament();
+          if (tournament) this.onTournamentLoaded(tournament);
+        },
+        error: () => {},
       });
     }
   }
