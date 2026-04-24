@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { TournamentService } from '../../services/tournament.service';
@@ -24,21 +24,35 @@ export class AdminDashboard implements OnInit {
   vegetarianMeals = signal(0);
   isLoading = signal(true);
 
+  activeTournaments = computed(() => this.tournamentService.activeTournaments());
+
   ngOnInit() {
     this.userService.getUsers(0, 1).subscribe({
       next: (page) => this.totalUsers.set(page.totalElements),
       error: () => this.totalUsers.set(null),
     });
 
-    this.tournamentService.getCurrent().subscribe({
-      next: (tournament) => {
-        this.tournament.set(tournament);
-        this.loadCoachStats(tournament.id);
-        this.loadMealStats(tournament.id);
+    this.tournamentService.loadActive().subscribe({
+      next: (tournaments) => {
+        if (tournaments.length > 0) {
+          const selected = this.tournamentService.selectedTournament()!;
+          this.tournament.set(selected);
+          this.loadCoachStats(selected.id);
+          this.loadMealStats(selected.id);
+        }
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),
     });
+  }
+
+  selectTournament(tournament: TournamentDetail): void {
+    this.tournamentService.selectTournament(tournament);
+    this.tournament.set(tournament);
+    this.isLoading.set(true);
+    this.loadCoachStats(tournament.id);
+    this.loadMealStats(tournament.id);
+    this.isLoading.set(false);
   }
 
   private loadCoachStats(tournamentId: number): void {

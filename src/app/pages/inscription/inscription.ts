@@ -46,12 +46,20 @@ export class Inscription implements OnInit {
 
   private loadTournament(): void {
     // Utiliser le signal si déjà chargé, sinon appeler getCurrent
-    const cached = this.tournamentService.currentTournament();
+    const cached = this.tournamentService.selectedTournament();
     if (cached) {
       this.onTournamentLoaded(cached);
     } else {
-      this.tournamentService.getCurrent().subscribe({
-        next: (tournament) => this.onTournamentLoaded(tournament),
+      this.tournamentService.loadActive().subscribe({
+        next: () => {
+          const tournament = this.tournamentService.selectedTournament();
+          if (tournament) {
+            this.onTournamentLoaded(tournament);
+          } else {
+            this.errorMessage.set('Aucun tournoi en cours.');
+            this.loading.set(false);
+          }
+        },
         error: () => {
           this.errorMessage.set('Aucun tournoi en cours.');
           this.loading.set(false);

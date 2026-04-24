@@ -20,6 +20,11 @@ export interface TournamentDetail extends TournamentSummary {
   registrationDeadline: string;
   maxParticipants: number;
   nbRounds: number;
+  location?: string;
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  featured: boolean;
   rules?: TournamentRules;
 }
 
@@ -29,4 +34,9 @@ export interface TournamentCreateUpdate {
   registrationDeadline: string;
   maxParticipants: number;
   nbRounds: number;
+  location?: string;
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  featured?: boolean;
 }

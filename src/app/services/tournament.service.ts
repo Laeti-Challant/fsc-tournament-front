@@ -16,7 +16,24 @@ export class TournamentService {
   private readonly eventsUrl = `${environment.apiUrl}/events`;
   private readonly tournamentsUrl = `${environment.apiUrl}/tournaments`;
 
-  currentTournament = signal<TournamentDetail | null>(null);
+  activeTournaments = signal<TournamentDetail[]>([]);
+  selectedTournament = signal<TournamentDetail | null>(null);
+
+  loadActive(): Observable<TournamentDetail[]> {
+    return this.http
+      .get<TournamentDetail[]>(`${this.tournamentsUrl}/active`, { withCredentials: true })
+      .pipe(
+        tap((tournaments) => {
+          this.activeTournaments.set(tournaments);
+          const featured = tournaments.find((t) => t.featured) ?? tournaments[0] ?? null;
+          this.selectedTournament.set(featured);
+        }),
+      );
+  }
+
+  selectTournament(tournament: TournamentDetail): void {
+    this.selectedTournament.set(tournament);
+  }
 
   getAll(): Observable<TournamentSummary[]> {
     return this.http.get<TournamentSummary[]>(this.eventsUrl, { withCredentials: true });
@@ -25,7 +42,13 @@ export class TournamentService {
   getCurrent(): Observable<TournamentDetail> {
     return this.http
       .get<TournamentDetail>(`${this.tournamentsUrl}/current`, { withCredentials: true })
-      .pipe(tap((tournament) => this.currentTournament.set(tournament)));
+      .pipe(tap((t) => this.selectedTournament.set(t)));
+  }
+
+  getActive(): Observable<TournamentDetail[]> {
+    return this.http.get<TournamentDetail[]>(`${this.tournamentsUrl}/active`, {
+      withCredentials: true,
+    });
   }
 
   getById(id: number): Observable<TournamentDetail> {

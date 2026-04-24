@@ -1,3 +1,21 @@
+@if (activeTournaments().length > 1) {
+  <div role="tablist" class="tabs tabs-bordered mb-6">
+    @for (t of activeTournaments(); track t.id) {
+      <button
+        role="tab"
+        class="tab"
+        [class.tab-active]="tournament()?.id === t.id"
+        (click)="selectTournament(t)"
+      >
+        {{ t.name }}
+        @if (t.featured) {
+          <span class="badge badge-primary badge-xs ml-1">★</span>
+        }
+      </button>
+    }
+  </div>
+}
+
 <!-- LOADING -->
 @if (loading()) {
   <div class="flex justify-center items-center min-h-screen">

@@ -15,7 +15,7 @@
           {{ statusLabel(round()!.status) }}
         </span>
       }
-      <a routerLink="/admin/rounds" class="btn btn-ghost btn-sm">← Retour</a>
+      <a [routerLink]="['/admin/rounds', eventId()]" class="btn btn-ghost btn-sm">← Retour</a>
     </div>
   </div>
 
@@ -186,7 +186,14 @@
                     </td>
                     <td class="text-center">
                       <a
-                        [routerLink]="['/admin/rounds', roundId(), 'matches', match.id]"
+                        [routerLink]="[
+                          '/admin/rounds',
+                          eventId(),
+                          'detail',
+                          roundId(),
+                          'matches',
+                          match.id,
+                        ]"
                         class="btn btn-ghost btn-xs"
                       >
                         {{ match.status === 'FINISHED' ? '✏ Résultat' : 'Saisir →' }}

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MenuService } from '../../services/menu.service';
 import { TournamentService } from '../../services/tournament.service';
 import { TournamentDetail } from '../../models/tournament.models';
@@ -15,6 +15,7 @@ import { Menu, MenuCreateUpdate } from '../../models/menu.models';
 export class AdminMenus implements OnInit {
   private readonly menuService = inject(MenuService);
   private readonly tournamentService = inject(TournamentService);
+  private readonly route = inject(ActivatedRoute);
 
   tournament = signal<TournamentDetail | null>(null);
   menus = signal<Menu[]>([]);
@@ -29,10 +30,13 @@ export class AdminMenus implements OnInit {
   formDescription = signal('');
 
   ngOnInit(): void {
-    this.tournamentService.getCurrent().subscribe({
+    const tournamentId = Number(this.route.snapshot.paramMap.get('tournamentId'));
+
+    this.tournamentService.getById(tournamentId).subscribe({
       next: (tournament) => {
         this.tournament.set(tournament);
-        this.loadMenus(tournament.id);
+        this.tournamentService.selectTournament(tournament);
+        this.loadMenus(tournamentId);
       },
       error: () => {
         this.error.set('Impossible de charger le tournoi.');

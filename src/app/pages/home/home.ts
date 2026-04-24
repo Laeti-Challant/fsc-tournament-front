@@ -35,6 +35,8 @@ export class Home implements OnInit, OnDestroy {
   latestParticipants = signal<CoachParticipant[]>([]);
   menus = signal<Menu[]>([]);
 
+  activeTournaments = computed(() => this.tournamentService.activeTournaments());
+
   constructor() {
     effect(() => {
       const isAuth = this.auth.isAuthenticated();
@@ -75,32 +77,47 @@ export class Home implements OnInit, OnDestroy {
   readonly statusLabels = TOURNAMENT_STATUS_LABELS;
 
   ngOnInit(): void {
-    this.tournamentService.getCurrent().subscribe({
-      next: (tournament) => {
-        this.tournament.set(tournament);
-
-        this.coachService.getParticipants(tournament.id).subscribe({
-          next: (participants) => this.latestParticipants.set(participants.slice(-4)),
-          error: () => this.latestParticipants.set([]),
-        });
-
-        this.loading.set(false);
-        this.startCountdown(tournament.eventDate);
-        if (tournament.id) {
-          this.rulesService.getByTournament(tournament.id).subscribe({
-            next: (rules) => this.rules.set(rules),
-            error: () => this.rules.set(null),
-          });
-          this.menuService.getByTournament(tournament.id).subscribe({
-            next: (menus) => this.menus.set(menus),
-            error: () => this.menus.set([]),
-          });
+    this.tournamentService.loadActive().subscribe({
+      next: (tournaments) => {
+        if (tournaments.length === 0) {
+          this.error.set('Aucun tournoi en cours.');
+          this.loading.set(false);
+          return;
         }
+        const selected = this.tournamentService.selectedTournament()!;
+        this.loadTournamentData(selected);
       },
       error: () => {
-        this.error.set('Impossible de charger les informations du tournoi.');
+        this.error.set('Impossible de charger les tournois.');
         this.loading.set(false);
       },
+    });
+  }
+
+  selectTournament(tournament: TournamentDetail): void {
+    this.tournamentService.selectTournament(tournament);
+    clearInterval(this.countdownInterval);
+    this.loadTournamentData(tournament);
+  }
+
+  private loadTournamentData(tournament: TournamentDetail): void {
+    this.tournament.set(tournament);
+    this.loading.set(false);
+    this.startCountdown(tournament.eventDate);
+
+    this.coachService.getParticipants(tournament.id).subscribe({
+      next: (p) => this.latestParticipants.set(p.slice(-4)),
+      error: () => this.latestParticipants.set([]),
+    });
+
+    this.rulesService.getByTournament(tournament.id).subscribe({
+      next: (rules) => this.rules.set(rules),
+      error: () => this.rules.set(null),
+    });
+
+    this.menuService.getByTournament(tournament.id).subscribe({
+      next: (menus) => this.menus.set(menus),
+      error: () => this.menus.set([]),
     });
   }
 
