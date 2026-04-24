@@ -3,7 +3,7 @@ import { CoachService } from '../../services/coach.service';
 import { TournamentService } from '../../services/tournament.service';
 import { TournamentDetail } from '../../models/tournament.models';
 import { CoachSummary } from '../../models/coach.models';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-inscriptions',
@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
 export class AdminInscriptions implements OnInit {
   private readonly coachService = inject(CoachService);
   private readonly tournamentService = inject(TournamentService);
+  private readonly route = inject(ActivatedRoute);
 
   tournament = signal<TournamentDetail | null>(null);
   coaches = signal<CoachSummary[]>([]);
@@ -36,10 +37,13 @@ export class AdminInscriptions implements OnInit {
   rejectedCount = computed(() => this.coaches().filter((c) => c.status === 'REJECTED').length);
 
   ngOnInit(): void {
-    this.tournamentService.getCurrent().subscribe({
+    const tournamentId = Number(this.route.snapshot.paramMap.get('tournamentId'));
+
+    this.tournamentService.getById(tournamentId).subscribe({
       next: (tournament) => {
         this.tournament.set(tournament);
-        this.loadCoaches(tournament.id);
+        this.tournamentService.selectTournament(tournament);
+        this.loadCoaches(tournamentId);
       },
       error: () => {
         this.error.set('Impossible de charger le tournoi.');

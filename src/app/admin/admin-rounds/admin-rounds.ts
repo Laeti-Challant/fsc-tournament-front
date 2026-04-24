@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { TournamentService } from '../../services/tournament.service';
 import { RoundService } from '../../services/round.service';
 import { Round } from '../../models/round.models';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-rounds',
@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 export class AdminRounds implements OnInit {
   private readonly tournamentService = inject(TournamentService);
   private readonly roundService = inject(RoundService);
+  private readonly route = inject(ActivatedRoute);
 
   eventId = signal<number | null>(null);
   rounds = signal<Round[]>([]);
@@ -22,10 +23,13 @@ export class AdminRounds implements OnInit {
   successMessage = signal<string | null>(null);
 
   ngOnInit() {
-    this.tournamentService.getCurrent().subscribe({
+    const tournamentId = Number(this.route.snapshot.paramMap.get('tournamentId'));
+
+    this.tournamentService.getById(tournamentId).subscribe({
       next: (tournament) => {
         this.eventId.set(tournament.id);
-        this.loadRounds(tournament.id);
+        this.tournamentService.selectTournament(tournament);
+        this.loadRounds(tournamentId);
       },
       error: () => {
         this.errorMessage.set('Impossible de charger le tournoi courant.');

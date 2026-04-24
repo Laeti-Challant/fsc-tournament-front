@@ -3,7 +3,7 @@ import { CoachService } from '../../services/coach.service';
 import { TournamentService } from '../../services/tournament.service';
 import { TournamentDetail } from '../../models/tournament.models';
 import { CoachMeal } from '../../models/coach.models';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-meals',
@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
 export class AdminMeals implements OnInit {
   private readonly coachService = inject(CoachService);
   private readonly tournamentService = inject(TournamentService);
+  private readonly route = inject(ActivatedRoute);
 
   tournament = signal<TournamentDetail | null>(null);
   meals = signal<CoachMeal[]>([]);
@@ -25,10 +26,13 @@ export class AdminMeals implements OnInit {
   totalNonVegetarian = computed(() => this.totalMeals() - this.totalVegetarian());
 
   ngOnInit(): void {
-    this.tournamentService.getCurrent().subscribe({
+    const tournamentId = Number(this.route.snapshot.paramMap.get('tournamentId'));
+
+    this.tournamentService.getById(tournamentId).subscribe({
       next: (tournament) => {
         this.tournament.set(tournament);
-        this.loadMeals(tournament.id);
+        this.tournamentService.selectTournament(tournament);
+        this.loadMeals(tournamentId);
       },
       error: () => {
         this.error.set('Impossible de charger le tournoi.');

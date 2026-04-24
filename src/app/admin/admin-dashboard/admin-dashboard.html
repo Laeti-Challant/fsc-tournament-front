@@ -1,8 +1,10 @@
 <div class="p-6">
   <h1 class="text-2xl font-bold mb-8">Tableau de bord</h1>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Section globale (hors tournoi) -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
     <!-- Carte Utilisateurs -->
+
     <a
       routerLink="/admin/users"
       class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
@@ -12,7 +14,6 @@
           <h2 class="card-title text-lg">Utilisateurs</h2>
           <span class="text-3xl">👥</span>
         </div>
-
         @if (isLoading()) {
           <span class="loading loading-spinner loading-sm text-primary"></span>
         } @else if (totalUsers() !== null) {
@@ -21,136 +22,180 @@
         } @else {
           <p class="text-neutral-content text-sm">Données indisponibles</p>
         }
-
         <div class="card-actions justify-end mt-4">
           <span class="text-primary text-sm">Gérer →</span>
         </div>
       </div>
     </a>
 
-    <!-- Carte Événement -->
+    <!-- Bouton créer un tournoi -->
+
     <a
-      routerLink="/admin/tournament"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+      routerLink="/admin/tournament/new"
+      class="card bg-base-200 shadow-fsc hover:border hover:border-success transition-all cursor-pointer"
     >
-      <div class="card-body">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="card-title text-lg">Événement</h2>
-          <span class="text-3xl">🏆</span>
-        </div>
-        <p class="text-neutral-content text-sm">Créer ou modifier l'événement</p>
-        <div class="card-actions justify-end mt-4">
-          <span class="text-primary text-sm">Gérer →</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Carte Inscriptions -->
-    <a
-      routerLink="/admin/inscriptions"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-    >
-      <div class="card-body">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="card-title text-lg">Inscriptions</h2>
-          <span class="text-3xl">📋</span>
-        </div>
-
-        @if (isLoading()) {
-          <span class="loading loading-spinner loading-sm text-primary"></span>
-        } @else {
-          <div class="flex gap-4 items-baseline">
-            <p class="text-4xl font-bold text-primary">{{ validatedCount() }}</p>
-            <p class="text-neutral-content text-sm">validés</p>
-          </div>
-          @if (pendingCount() > 0) {
-            <div class="mt-1">
-              <span class="badge badge-warning badge-sm">{{ pendingCount() }} en attente</span>
-            </div>
-          }
-        }
-
-        <div class="card-actions justify-end mt-4">
-          <span class="text-primary text-sm">Gérer →</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Carte Repas -->
-    <a
-      routerLink="/admin/meals"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-    >
-      <div class="card-body">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="card-title text-lg">Repas</h2>
-          <span class="text-3xl">🍽️</span>
-        </div>
-
-        @if (isLoading()) {
-          <span class="loading loading-spinner loading-sm text-primary"></span>
-        } @else {
-          <p class="text-4xl font-bold text-primary">{{ totalMeals() }}</p>
-          <p class="text-neutral-content text-sm">
-            repas dont {{ vegetarianMeals() }} végétarien{{ vegetarianMeals() > 1 ? 's' : '' }}
-          </p>
-        }
-
-        <div class="card-actions justify-end mt-4">
-          <span class="text-primary text-sm">Gérer →</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Carte Rounds -->
-    <a
-      routerLink="/admin/rounds"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-    >
-      <div class="card-body">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="card-title text-lg">Rounds</h2>
-          <span class="text-3xl">⚔️</span>
-        </div>
-        <p class="text-neutral-content text-sm">Gérer les rounds et appariements</p>
-        <div class="card-actions justify-end mt-4">
-          <span class="text-primary text-sm">Gérer →</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Carte Règles -->
-    <a
-      routerLink="/admin/rules"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-    >
-      <div class="card-body">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="card-title text-lg">Règles</h2>
-          <span class="text-3xl">📖</span>
-        </div>
-        <p class="text-neutral-content text-sm">Gérer le ruleset du tournoi</p>
-        <div class="card-actions justify-end mt-4">
-          <span class="text-primary text-sm">Gérer →</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- Carte Menus -->
-    <a
-      routerLink="/admin/menus"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-    >
-      <div class="card-body">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="card-title text-lg">Menus</h2>
-          <span class="text-3xl">📝</span>
-        </div>
-        <p class="text-neutral-content text-sm">Configurer les menus du tournoi</p>
-        <div class="card-actions justify-end mt-4">
-          <span class="text-primary text-sm">Gérer →</span>
-        </div>
+      <div class="card-body items-center justify-center text-center">
+        <span class="text-4xl mb-2">➕</span>
+        <h2 class="card-title text-lg">Créer un tournoi</h2>
+        <p class="text-neutral-content text-sm">Organiser un nouvel événement</p>
       </div>
     </a>
   </div>
+
+  <!-- Section tournoi avec onglets -->
+  @if (activeTournaments().length > 0) {
+    <!-- Onglets -->
+    @if (activeTournaments().length > 1) {
+      <div role="tablist" class="tabs tabs-bordered mb-6">
+        @for (t of activeTournaments(); track t.id) {
+          <button
+            role="tab"
+            class="tab"
+            [class.tab-active]="tournament()?.id === t.id"
+            (click)="selectTournament(t)"
+          >
+            {{ t.name }}
+            @if (t.featured) {
+              <span class="badge badge-primary badge-xs ml-1">★</span>
+            }
+          </button>
+        }
+      </div>
+    } @else {
+      <h2 class="text-lg font-semibold mb-4">{{ tournament()?.name }}</h2>
+    }
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Modifier le tournoi -->
+
+      <a
+        [routerLink]="['/admin/tournament', tournament()?.id]"
+        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+      >
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="card-title text-lg">Événement</h2>
+            <span class="text-3xl">🏆</span>
+          </div>
+          <p class="text-neutral-content text-sm">Modifier le tournoi sélectionné</p>
+          <div class="card-actions justify-end mt-4">
+            <span class="text-primary text-sm">Modifier →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Inscriptions -->
+
+      <a
+        [routerLink]="['/admin/inscriptions', tournament()?.id]"
+        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+      >
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="card-title text-lg">Inscriptions</h2>
+            <span class="text-3xl">📋</span>
+          </div>
+          @if (isLoading()) {
+            <span class="loading loading-spinner loading-sm text-primary"></span>
+          } @else {
+            <div class="flex gap-4 items-baseline">
+              <p class="text-4xl font-bold text-primary">{{ validatedCount() }}</p>
+              <p class="text-neutral-content text-sm">validés</p>
+            </div>
+            @if (pendingCount() > 0) {
+              <div class="mt-1">
+                <span class="badge badge-warning badge-sm">{{ pendingCount() }} en attente</span>
+              </div>
+            }
+          }
+          <div class="card-actions justify-end mt-4">
+            <span class="text-primary text-sm">Gérer →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Repas -->
+
+      <a
+        [routerLink]="['/admin/meals', tournament()?.id]"
+        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+      >
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="card-title text-lg">Repas</h2>
+            <span class="text-3xl">🍽️</span>
+          </div>
+          @if (isLoading()) {
+            <span class="loading loading-spinner loading-sm text-primary"></span>
+          } @else {
+            <p class="text-4xl font-bold text-primary">{{ totalMeals() }}</p>
+            <p class="text-neutral-content text-sm">
+              repas dont {{ vegetarianMeals() }} végétarien{{ vegetarianMeals() > 1 ? 's' : '' }}
+            </p>
+          }
+          <div class="card-actions justify-end mt-4">
+            <span class="text-primary text-sm">Gérer →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Rounds -->
+
+      <a
+        [routerLink]="['/admin/rounds', tournament()?.id]"
+        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+      >
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="card-title text-lg">Rounds</h2>
+            <span class="text-3xl">⚔️</span>
+          </div>
+          <p class="text-neutral-content text-sm">Gérer les rounds et appariements</p>
+          <div class="card-actions justify-end mt-4">
+            <span class="text-primary text-sm">Gérer →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Règles -->
+
+      <a
+        [routerLink]="['/admin/rules', tournament()?.id]"
+        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+      >
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="card-title text-lg">Règles</h2>
+            <span class="text-3xl">📖</span>
+          </div>
+          <p class="text-neutral-content text-sm">Gérer le ruleset du tournoi</p>
+          <div class="card-actions justify-end mt-4">
+            <span class="text-primary text-sm">Gérer →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Menus -->
+
+      <a
+        [routerLink]="['/admin/menus', tournament()?.id]"
+        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
+      >
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="card-title text-lg">Menus</h2>
+            <span class="text-3xl">📝</span>
+          </div>
+          <p class="text-neutral-content text-sm">Configurer les menus du tournoi</p>
+          <div class="card-actions justify-end mt-4">
+            <span class="text-primary text-sm">Gérer →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  } @else {
+    <div class="alert alert-info">
+      <span>Aucun tournoi actif. Créez votre premier tournoi !</span>
+    </div>
+  }
 </div>
