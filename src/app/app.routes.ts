@@ -73,7 +73,7 @@ export const routes: Routes = [
         loadComponent: () => import('./admin/admin-rounds/admin-rounds').then((c) => c.AdminRounds),
       },
       {
-        path: 'rounds/:tournamentId/detail/:id',
+        path: 'rounds/:tournamentId/detail/:roundId',
         loadComponent: () =>
           import('./admin/admin-round-detail/admin-round-detail').then((c) => c.AdminRoundDetail),
       },
