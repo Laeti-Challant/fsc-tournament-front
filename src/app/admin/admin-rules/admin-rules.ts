@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TournamentService } from '../../services/tournament.service';
 import { RulesService } from '../../services/rules.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentDetail } from '../../models/tournament.models';
 import { TournamentRules } from '../../models/rules.models';
 
@@ -12,14 +12,15 @@ import { TournamentRules } from '../../models/rules.models';
   templateUrl: './admin-rules.html',
   styleUrl: './admin-rules.css',
 })
-export class AdminRules {
+export class AdminRules implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly eventService = inject(TournamentService);
+  private readonly tournamentService = inject(TournamentService);
   private readonly rulesService = inject(RulesService);
   protected readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
-  currentEvent = signal<TournamentDetail | null>(null);
-  previousEvent = signal<TournamentDetail | null>(null);
+  tournament = signal<TournamentDetail | null>(null);
+  previousTournament = signal<TournamentDetail | null>(null);
   isEditMode = signal(false);
   loading = signal(true);
   submitting = signal(false);
@@ -49,37 +50,40 @@ export class AdminRules {
   }
 
   ngOnInit(): void {
-    this.eventService.getCurrent().subscribe({
-      next: (event) => {
-        this.currentEvent.set(event);
-        this.rulesService.getByTournament(event.id!).subscribe({
+    const tournamentId = Number(this.route.snapshot.paramMap.get('tournamentId'));
+
+    this.tournamentService.getById(tournamentId).subscribe({
+      next: (tournament) => {
+        this.tournament.set(tournament);
+        this.tournamentService.selectTournament(tournament);
+
+        this.rulesService.getByTournament(tournament.id).subscribe({
           next: (rules) => {
             this.isEditMode.set(true);
             this.patchForm(rules);
             this.loading.set(false);
           },
           error: () => {
-            // Pas de rules — mode création, chercher l'event précédent
             this.isEditMode.set(false);
-            this.loadPreviousEvent();
+            this.loadPreviousTournament();
           },
         });
       },
       error: () => {
-        this.errorMessage.set('Aucun événement courant trouvé.');
+        this.errorMessage.set('Tournoi introuvable.');
         this.loading.set(false);
       },
     });
   }
 
-  private loadPreviousEvent(): void {
-    this.eventService.getAll().subscribe({
-      next: (events) => {
-        const previous = events
-          .filter((e) => e.id !== this.currentEvent()?.id && e.status === 'FINISHED')
+  private loadPreviousTournament(): void {
+    this.tournamentService.getAll().subscribe({
+      next: (tournaments) => {
+        const previous = tournaments
+          .filter((e) => e.id !== this.tournament()?.id && e.status === 'FINISHED')
           .sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime())[0];
         if (previous) {
-          this.previousEvent.set(previous as any);
+          this.previousTournament.set(previous as any);
         }
         this.loading.set(false);
       },
@@ -88,18 +92,18 @@ export class AdminRules {
   }
 
   cloneFromPrevious(): void {
-    const prev = this.previousEvent();
-    const curr = this.currentEvent();
+    const prev = this.previousTournament();
+    const curr = this.tournament();
     if (!prev || !curr) return;
 
     this.cloning.set(true);
     this.errorMessage.set(null);
 
-    this.rulesService.cloneFrom(curr.id!, prev.id!).subscribe({
+    this.rulesService.cloneFrom(curr.id, prev.id).subscribe({
       next: (rules) => {
         this.isEditMode.set(true);
         this.patchForm(rules);
-        this.successMessage.set('Ruleset cloné avec succès depuis ' + prev.name);
+        this.successMessage.set('Ruleset cloné depuis ' + prev.name);
         this.cloning.set(false);
       },
       error: (err) => {
@@ -178,7 +182,7 @@ export class AdminRules {
     this.successMessage.set(null);
 
     const dto = this.form.getRawValue();
-    const tournamentId = this.currentEvent()!.id!;
+    const tournamentId = this.tournament()!.id!;
 
     const request$ = this.isEditMode()
       ? this.rulesService.update(tournamentId, dto)

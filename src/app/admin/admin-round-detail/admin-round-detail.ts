@@ -41,16 +41,18 @@ export class AdminRoundDetail implements OnInit {
   challengeCoach2Id = signal<number | null>(null);
 
   ngOnInit() {
-    const roundId = Number(this.route.snapshot.paramMap.get('id'));
+    const tournamentId = Number(this.route.snapshot.paramMap.get('tournamentId'));
+    const roundId = Number(this.route.snapshot.paramMap.get('roundId'));
     this.roundId.set(roundId);
 
-    this.tournamentService.getCurrent().subscribe({
+    this.tournamentService.getById(tournamentId).subscribe({
       next: (tournament) => {
         this.eventId.set(tournament.id);
+        this.tournamentService.selectTournament(tournament);
         this.loadAll(tournament.id, roundId);
       },
       error: () => {
-        this.errorMessage.set('Impossible de charger le tournoi courant.');
+        this.errorMessage.set('Impossible de charger le tournoi.');
         this.isLoading.set(false);
       },
     });

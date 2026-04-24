@@ -21,6 +21,7 @@ export class AdminMatchResult implements OnInit {
   private readonly coachResultService = inject(CoachResultService);
 
   eventId = signal<number | null>(null);
+  tournamentId = signal<number | null>(null);
   roundId = signal<number | null>(null);
   matchId = signal<number | null>(null);
 
@@ -62,20 +63,22 @@ export class AdminMatchResult implements OnInit {
   foulActions2 = signal(0);
 
   hasResults = computed(() => this.existingResults().length === 2);
-
   ngOnInit() {
+    const tournamentId = Number(this.route.snapshot.paramMap.get('tournamentId'));
     const roundId = Number(this.route.snapshot.paramMap.get('roundId'));
     const matchId = Number(this.route.snapshot.paramMap.get('matchId'));
+    this.tournamentId.set(tournamentId);
     this.roundId.set(roundId);
     this.matchId.set(matchId);
 
-    this.tournamentService.getCurrent().subscribe({
+    this.tournamentService.getById(tournamentId).subscribe({
       next: (tournament) => {
         this.eventId.set(tournament.id);
+        this.tournamentService.selectTournament(tournament);
         this.loadAll(tournament.id, roundId, matchId);
       },
       error: () => {
-        this.errorMessage.set('Impossible de charger le tournoi courant.');
+        this.errorMessage.set('Impossible de charger le tournoi.');
         this.isLoading.set(false);
       },
     });
@@ -185,7 +188,11 @@ export class AdminMatchResult implements OnInit {
         this.isSubmitting.set(false);
         this.successMessage.set('Résultat enregistré avec succès !');
         // Retour vers le round après 1,5s
-        setTimeout(() => this.router.navigate(['/admin/rounds', roundId]), 1500);
+        setTimeout(
+          () =>
+            this.router.navigate(['/admin/rounds', this.tournamentId(), 'detail', this.roundId()]),
+          1500,
+        );
       },
       error: (err) => {
         this.errorMessage.set(err.error?.message ?? "Erreur lors de l'enregistrement.");
@@ -217,7 +224,7 @@ export class AdminMatchResult implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/rounds', this.roundId()]);
+    this.router.navigate(['/admin/rounds', this.tournamentId(), 'detail', this.roundId()]);
   }
 
   resultLabel(result: 'WIN' | 'LOSS' | 'DRAW'): string {

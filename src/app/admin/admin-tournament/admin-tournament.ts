@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { TournamentDetail } from '../../models/tournament.models';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TournamentService } from '../../services/tournament.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-tournament',
@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class AdminTournament implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly tournamentService = inject(TournamentService);
+  private readonly route = inject(ActivatedRoute);
   protected readonly router = inject(Router);
 
   existingTournament = signal<TournamentDetail | null>(null);
@@ -32,21 +33,29 @@ export class AdminTournament implements OnInit {
     address: [''],
     postalCode: ['', [Validators.pattern('^[0-9]{5}$')]],
     city: [''],
+    featured: [false],
   });
 
   ngOnInit(): void {
-    this.tournamentService.getCurrent().subscribe({
-      next: (tournament) => {
-        this.existingTournament.set(tournament);
-        this.isEditMode.set(true);
-        this.patchForm(tournament);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.isEditMode.set(false);
-        this.loading.set(false);
-      },
-    });
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.tournamentService.getById(Number(id)).subscribe({
+        next: (tournament) => {
+          this.existingTournament.set(tournament);
+          this.isEditMode.set(true);
+          this.patchForm(tournament);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.errorMessage.set('Tournoi introuvable.');
+          this.loading.set(false);
+        },
+      });
+    } else {
+      this.isEditMode.set(false);
+      this.loading.set(false);
+    }
   }
 
   private patchForm(tournament: TournamentDetail): void {
@@ -56,6 +65,11 @@ export class AdminTournament implements OnInit {
       registrationDeadline: tournament.registrationDeadline,
       maxParticipants: tournament.maxParticipants,
       nbRounds: tournament.nbRounds,
+      location: tournament.location,
+      address: tournament.address,
+      postalCode: tournament.postalCode,
+      city: tournament.city,
+      featured: tournament.featured,
     });
   }
 
