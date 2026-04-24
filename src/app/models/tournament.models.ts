@@ -24,6 +24,7 @@ export interface TournamentDetail extends TournamentSummary {
   address?: string;
   postalCode?: string;
   city?: string;
+  featured: boolean;
   rules?: TournamentRules;
 }
 
@@ -37,4 +38,5 @@ export interface TournamentCreateUpdate {
   address?: string;
   postalCode?: string;
   city?: string;
+  featured?: boolean;
 }
