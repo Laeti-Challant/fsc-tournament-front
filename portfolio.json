@@ -3,7 +3,7 @@
   "actif": true,
   "termine": false,
   "contexte": "stage",
-  "screenshot": "",
+  "screenshot": "/screenshots/fsc-tournament.png",
   "technologies": ["Angular", "TypeScript"],
   "competences": [
     "Développement d'une SPA avec Angular",
