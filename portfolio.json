@@ -1,0 +1,13 @@
+{
+  "visible": true,
+  "actif": true,
+  "termine": false,
+  "contexte": "stage",
+  "screenshot": "",
+  "technologies": ["Angular", "TypeScript"],
+  "competences": [
+    "Développement d'une SPA avec Angular",
+    "Consommation d'une API REST",
+    "Gestion de l'authentification côté client (JWT)"
+  ]
+}
