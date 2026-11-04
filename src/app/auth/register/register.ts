@@ -1,8 +1,8 @@
 import { Component, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { ModalService } from '../../services/modal.service';
-import { RegisterDTO } from '../../models/auth.models';
+import { AuthService } from '../../core/services/auth.service';
+import { ModalService } from '../../core/services/modal.service';
+import { RegisterDTO } from '../../core/models/auth.models';
 
 @Component({
   selector: 'app-register',

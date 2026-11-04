@@ -1,16 +1,16 @@
 import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { TournamentService } from '../../services/tournament.service';
-import { RulesService } from '../../services/rules.service';
-import { AuthService } from '../../services/auth.service';
+import { TournamentService } from '../../core/services/tournament.service';
+import { RulesService } from '../../core/services/rules.service';
+import { AuthService } from '../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import { TOURNAMENT_STATUS_LABELS, TournamentDetail } from '../../models/tournament.models';
-import { TournamentRules } from '../../models/rules.models';
+import { TOURNAMENT_STATUS_LABELS, TournamentDetail } from '../../core/models/tournament.models';
+import { TournamentRules } from '../../core/models/rules.models';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { ModalService } from '../../services/modal.service';
-import { CoachService } from '../../services/coach.service';
-import { CoachParticipant } from '../../models/coach.models';
-import { MenuService } from '../../services/menu.service';
-import { Menu } from '../../models/menu.models';
+import { ModalService } from '../../core/services/modal.service';
+import { CoachService } from '../../core/services/coach.service';
+import { CoachParticipant } from '../../core/models/coach.models';
+import { MenuService } from '../../core/services/menu.service';
+import { Menu } from '../../core/models/menu.models';
 
 @Component({
   selector: 'app-home',

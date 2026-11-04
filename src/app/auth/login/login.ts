@@ -1,8 +1,8 @@
 import { Component, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { ModalService } from '../../services/modal.service';
-import { LoginDTO } from '../../models/auth.models';
+import { AuthService } from '../../core/services/auth.service';
+import { ModalService } from '../../core/services/modal.service';
+import { LoginDTO } from '../../core/models/auth.models';
 import { Router } from '@angular/router';
 
 @Component({
