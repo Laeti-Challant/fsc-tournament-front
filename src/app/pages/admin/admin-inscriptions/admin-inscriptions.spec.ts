@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 import { AdminInscriptions } from './admin-inscriptions';
 
@@ -9,6 +11,7 @@ describe('AdminInscriptions', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AdminInscriptions],
+      providers: [provideRouter([]), provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminInscriptions);
