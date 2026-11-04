@@ -48,7 +48,7 @@ describe('UserService', () => {
 
   it('getUsers() devrait retourner une page de UserDTO', () => {
     const mockUsers: UserDTO[] = [
-      { id: 1, pseudo: 'Nithog', role: 'ADMIN', active: true },
+      { id: 1, pseudo: 'TestCoach', role: 'ADMIN', active: true },
       { id: 2, pseudo: 'Coach1', role: 'PLAYER', active: true },
     ];
     const mockPage = {
@@ -61,7 +61,7 @@ describe('UserService', () => {
 
     service.getUsers().subscribe((page) => {
       expect(page.content.length).toBe(2);
-      expect(page.content[0].pseudo).toBe('Nithog');
+      expect(page.content[0].pseudo).toBe('TestCoach');
       expect(page.totalElements).toBe(2);
     });
 
@@ -79,12 +79,12 @@ describe('UserService', () => {
     expect(req.request.method).toBe('PUT');
     expect(req.request.withCredentials).toBe(true);
     expect(req.request.body).toEqual(updateData);
-    req.flush({ id: 1, pseudo: 'Nithog', role: 'ADMIN', active: true });
+    req.flush({ id: 1, pseudo: 'TestCoach', role: 'ADMIN', active: true });
   });
 
   it('updateUser() devrait retourner le UserDTO mis à jour', () => {
     const updateData: UserAdminUpdateDTO = { role: 'ADMIN', active: true };
-    const mockResponse: UserDTO = { id: 1, pseudo: 'Nithog', role: 'ADMIN', active: true };
+    const mockResponse: UserDTO = { id: 1, pseudo: 'TestCoach', role: 'ADMIN', active: true };
 
     service.updateUser(1, updateData).subscribe((user) => {
       expect(user.role).toBe('ADMIN');
@@ -102,13 +102,13 @@ describe('UserService', () => {
     const req = httpMock.expectOne(`${environment.apiUrl}/users/me`);
     expect(req.request.method).toBe('GET');
     expect(req.request.withCredentials).toBe(true);
-    req.flush({ id: 1, pseudo: 'Nithog', role: 'PLAYER', active: true });
+    req.flush({ id: 1, pseudo: 'TestCoach', role: 'PLAYER', active: true });
   });
 
   it("getMe() devrait retourner le UserDTO de l'utilisateur connecté", () => {
-    const mockUser: UserDTO = { id: 1, pseudo: 'Nithog', role: 'PLAYER', active: true };
+    const mockUser: UserDTO = { id: 1, pseudo: 'TestCoach', role: 'PLAYER', active: true };
     service.getMe().subscribe((user) => {
-      expect(user.pseudo).toBe('Nithog');
+      expect(user.pseudo).toBe('TestCoach');
       expect(user.id).toBe(1);
     });
 

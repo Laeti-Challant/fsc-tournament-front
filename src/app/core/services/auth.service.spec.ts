@@ -40,9 +40,9 @@ describe('AuthService', () => {
   // ─── Tests login ──────────────────────────────────────────────
 
   it('login() devrait appeler POST /auth/login', () => {
-    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'PLAYER' };
+    const mockResponse: AuthResponseDTO = { pseudo: 'TestCoach', role: 'PLAYER' };
 
-    service.login({ email: 'nithog@test.com', password: '123' }).subscribe();
+    service.login({ email: 'testcoach@example.com', password: '123' }).subscribe();
 
     const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
     expect(req.request.method).toBe('POST');
@@ -51,14 +51,14 @@ describe('AuthService', () => {
   });
 
   it('login() devrait mettre à jour le signal currentUser', () => {
-    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'PLAYER' };
+    const mockResponse: AuthResponseDTO = { pseudo: 'TestCoach', role: 'PLAYER' };
 
-    service.login({ email: 'nithog@test.com', password: '123' }).subscribe();
+    service.login({ email: 'testcoach@example.com', password: '123' }).subscribe();
 
     httpMock.expectOne(`${environment.apiUrl}/auth/login`).flush(mockResponse);
 
     expect(service.isAuthenticated()).toBe(true);
-    expect(service.pseudo()).toBe('Nithog');
+    expect(service.pseudo()).toBe('TestCoach');
     expect(service.isAdmin()).toBe(false);
   });
 
@@ -93,8 +93,8 @@ describe('AuthService', () => {
 
   it('logout() devrait vider le signal currentUser', () => {
     // D'abord on connecte un utilisateur
-    const mockResponse: AuthResponseDTO = { pseudo: 'Nithog', role: 'PLAYER' };
-    service.login({ email: 'nithog@test.com', password: '123' }).subscribe();
+    const mockResponse: AuthResponseDTO = { pseudo: 'TestCoach', role: 'PLAYER' };
+    service.login({ email: 'testcoach@example.com', password: '123' }).subscribe();
     httpMock.expectOne(`${environment.apiUrl}/auth/login`).flush(mockResponse);
     expect(service.isAuthenticated()).toBe(true); // vérification intermédiaire
 
