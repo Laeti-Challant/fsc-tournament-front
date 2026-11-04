@@ -48,8 +48,8 @@ describe('UserService', () => {
 
   it('getUsers() devrait retourner une page de UserDTO', () => {
     const mockUsers: UserDTO[] = [
-      { id: 1, pseudo: 'TestCoach', role: 'ADMIN', active: true },
-      { id: 2, pseudo: 'Coach1', role: 'PLAYER', active: true },
+      { id: 1, email: 'testcoach@example.com', pseudo: 'TestCoach', role: 'ADMIN', active: true },
+      { id: 2, email: 'coach1@example.com', pseudo: 'Coach1', role: 'PLAYER', active: true },
     ];
     const mockPage = {
       content: mockUsers,
@@ -84,7 +84,7 @@ describe('UserService', () => {
 
   it('updateUser() devrait retourner le UserDTO mis à jour', () => {
     const updateData: UserAdminUpdateDTO = { role: 'ADMIN', active: true };
-    const mockResponse: UserDTO = { id: 1, pseudo: 'TestCoach', role: 'ADMIN', active: true };
+    const mockResponse: UserDTO = { id: 1, email: 'testcoach@example.com', pseudo: 'TestCoach', role: 'ADMIN', active: true };
 
     service.updateUser(1, updateData).subscribe((user) => {
       expect(user.role).toBe('ADMIN');
@@ -106,7 +106,7 @@ describe('UserService', () => {
   });
 
   it("getMe() devrait retourner le UserDTO de l'utilisateur connecté", () => {
-    const mockUser: UserDTO = { id: 1, pseudo: 'TestCoach', role: 'PLAYER', active: true };
+    const mockUser: UserDTO = { id: 1, email: 'testcoach@example.com', pseudo: 'TestCoach', role: 'PLAYER', active: true };
     service.getMe().subscribe((user) => {
       expect(user.pseudo).toBe('TestCoach');
       expect(user.id).toBe(1);
