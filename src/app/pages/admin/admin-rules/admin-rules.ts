@@ -5,10 +5,11 @@ import { RulesService } from '../../../core/services/rules.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentDetail } from '../../../core/models/tournament.models';
 import { TournamentRules } from '../../../core/models/rules.models';
+import { Card } from '../../../shared/card/card';
 
 @Component({
   selector: 'app-admin-rules',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Card],
   templateUrl: './admin-rules.html',
   styleUrl: './admin-rules.css',
 })
