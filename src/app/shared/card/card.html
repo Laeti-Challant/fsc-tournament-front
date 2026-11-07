@@ -1,0 +1,9 @@
+<div
+  class="card bg-base-200"
+  [class.shadow-fsc]="variant() === 'fsc'"
+  [class.shadow]="variant() === 'plain'"
+>
+  <div class="card-body">
+    <ng-content />
+  </div>
+</div>
