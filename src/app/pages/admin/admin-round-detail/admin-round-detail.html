@@ -78,134 +78,130 @@
 
     <!-- Formulaire défi -->
     @if (showChallengeForm()) {
-      <div class="card bg-base-200 shadow-fsc mb-6">
-        <div class="card-body">
-          <h2 class="title-card mb-4">Enregistrer un défi</h2>
-          <div class="flex flex-wrap gap-4 items-end">
-            <div class="form-control flex-1 min-w-48">
-              <label class="label">
-                <span class="label-text">Coach 1</span>
-              </label>
-              <select
-                class="select select-bordered"
-                [ngModel]="challengeCoach1Id()"
-                (ngModelChange)="challengeCoach1Id.set($event ? +$event : null)"
-              >
-                <option [value]="null">-- Sélectionner --</option>
-                @for (coach of availableCoaches(); track coach.id) {
-                  <option [value]="coach.id">{{ coach.coachPseudo }} ({{ coach.teamName }})</option>
-                }
-              </select>
-            </div>
-
-            <div class="form-control flex-1 min-w-48">
-              <label class="label">
-                <span class="label-text">Coach 2</span>
-              </label>
-              <select
-                class="select select-bordered"
-                [ngModel]="challengeCoach2Id()"
-                (ngModelChange)="challengeCoach2Id.set($event ? +$event : null)"
-              >
-                <option [value]="null">-- Sélectionner --</option>
-                @for (coach of availableCoaches(); track coach.id) {
-                  @if (coach.id !== challengeCoach1Id()) {
-                    <option [value]="coach.id">
-                      {{ coach.coachPseudo }} ({{ coach.teamName }})
-                    </option>
-                  }
-                }
-              </select>
-            </div>
-
-            <button
-              class="btn btn-primary"
-              [disabled]="!challengeCoach1Id() || !challengeCoach2Id() || isSubmittingChallenge()"
-              (click)="submitChallenge()"
+      <app-card class="mb-6">
+        <h2 class="title-card mb-4">Enregistrer un défi</h2>
+        <div class="flex flex-wrap gap-4 items-end">
+          <div class="form-control flex-1 min-w-48">
+            <label class="label">
+              <span class="label-text">Coach 1</span>
+            </label>
+            <select
+              class="select select-bordered"
+              [ngModel]="challengeCoach1Id()"
+              (ngModelChange)="challengeCoach1Id.set($event ? +$event : null)"
             >
-              @if (isSubmittingChallenge()) {
-                <span class="loading loading-spinner loading-sm"></span>
-              } @else {
-                Valider le défi
+              <option [value]="null">-- Sélectionner --</option>
+              @for (coach of availableCoaches(); track coach.id) {
+                <option [value]="coach.id">{{ coach.coachPseudo }} ({{ coach.teamName }})</option>
               }
-            </button>
+            </select>
           </div>
+
+          <div class="form-control flex-1 min-w-48">
+            <label class="label">
+              <span class="label-text">Coach 2</span>
+            </label>
+            <select
+              class="select select-bordered"
+              [ngModel]="challengeCoach2Id()"
+              (ngModelChange)="challengeCoach2Id.set($event ? +$event : null)"
+            >
+              <option [value]="null">-- Sélectionner --</option>
+              @for (coach of availableCoaches(); track coach.id) {
+                @if (coach.id !== challengeCoach1Id()) {
+                  <option [value]="coach.id">
+                    {{ coach.coachPseudo }} ({{ coach.teamName }})
+                  </option>
+                }
+              }
+            </select>
+          </div>
+
+          <button
+            class="btn btn-primary"
+            [disabled]="!challengeCoach1Id() || !challengeCoach2Id() || isSubmittingChallenge()"
+            (click)="submitChallenge()"
+          >
+            @if (isSubmittingChallenge()) {
+              <span class="loading loading-spinner loading-sm"></span>
+            } @else {
+              Valider le défi
+            }
+          </button>
         </div>
-      </div>
+      </app-card>
     }
 
     <!-- Liste des matches -->
-    <div class="card bg-base-200 shadow-fsc">
-      <div class="card-body">
-        <h2 class="title-card mb-4">
-          Liste des matches
-          <span class="badge badge-neutral ml-2">{{ matches().length }}</span>
-        </h2>
+    <app-card>
+      <h2 class="title-card mb-4">
+        Liste des matches
+        <span class="badge badge-neutral ml-2">{{ matches().length }}</span>
+      </h2>
 
-        @if (matches().length === 0) {
-          <p class="text-neutral-content text-sm py-4 text-center">
-            Aucun match pour ce round. Saisissez des défis ou générez les appariements.
-          </p>
-        } @else {
-          <div class="overflow-x-auto">
-            <table class="table-lg table-zebra w-full">
-              <thead>
+      @if (matches().length === 0) {
+        <p class="text-neutral-content text-sm py-4 text-center">
+          Aucun match pour ce round. Saisissez des défis ou générez les appariements.
+        </p>
+      } @else {
+        <div class="overflow-x-auto">
+          <table class="table-lg table-zebra w-full">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Coach 1</th>
+                <th class="text-center">VS</th>
+                <th>Coach 2</th>
+                <th class="text-center">Statut</th>
+                <!-- Feature 8 : colonne résultat -->
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (match of matches(); track match.id; let i = $index) {
                 <tr>
-                  <th>#</th>
-                  <th>Coach 1</th>
-                  <th class="text-center">VS</th>
-                  <th>Coach 2</th>
-                  <th class="text-center">Statut</th>
-                  <!-- Feature 8 : colonne résultat -->
-                  <th class="text-center">Action</th>
+                  <td class="text-neutral-content text-sm">{{ i + 1 }}</td>
+                  <td>
+                    <div class="font-semibold">{{ match.coach1.coachPseudo }}</div>
+                    <div class="text-neutral-content text-xs">{{ match.coach1.teamName }}</div>
+                    <div class="text-neutral-content text-xs">{{ match.coach1.race }}</div>
+                  </td>
+                  <td class="text-center text-primary font-bold">⚔</td>
+                  <td>
+                    <div class="font-semibold">{{ match.coach2.coachPseudo }}</div>
+                    <div class="text-neutral-content text-xs">{{ match.coach2.teamName }}</div>
+                    <div class="text-neutral-content text-xs">{{ match.coach2.race }}</div>
+                  </td>
+                  <td class="text-center">
+                    <span
+                      class="badge {{
+                        match.status === 'FINISHED' ? 'badge-success' : 'badge-neutral'
+                      }} badge-sm"
+                    >
+                      {{ matchStatusLabel(match.status) }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <a
+                      [routerLink]="[
+                        '/admin/rounds',
+                        eventId(),
+                        'detail',
+                        roundId(),
+                        'matches',
+                        match.id,
+                      ]"
+                      class="btn btn-ghost btn-xs"
+                    >
+                      {{ match.status === 'FINISHED' ? '✏ Résultat' : 'Saisir →' }}
+                    </a>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                @for (match of matches(); track match.id; let i = $index) {
-                  <tr>
-                    <td class="text-neutral-content text-sm">{{ i + 1 }}</td>
-                    <td>
-                      <div class="font-semibold">{{ match.coach1.coachPseudo }}</div>
-                      <div class="text-neutral-content text-xs">{{ match.coach1.teamName }}</div>
-                      <div class="text-neutral-content text-xs">{{ match.coach1.race }}</div>
-                    </td>
-                    <td class="text-center text-primary font-bold">⚔</td>
-                    <td>
-                      <div class="font-semibold">{{ match.coach2.coachPseudo }}</div>
-                      <div class="text-neutral-content text-xs">{{ match.coach2.teamName }}</div>
-                      <div class="text-neutral-content text-xs">{{ match.coach2.race }}</div>
-                    </td>
-                    <td class="text-center">
-                      <span
-                        class="badge {{
-                          match.status === 'FINISHED' ? 'badge-success' : 'badge-neutral'
-                        }} badge-sm"
-                      >
-                        {{ matchStatusLabel(match.status) }}
-                      </span>
-                    </td>
-                    <td class="text-center">
-                      <a
-                        [routerLink]="[
-                          '/admin/rounds',
-                          eventId(),
-                          'detail',
-                          roundId(),
-                          'matches',
-                          match.id,
-                        ]"
-                        class="btn btn-ghost btn-xs"
-                      >
-                        {{ match.status === 'FINISHED' ? '✏ Résultat' : 'Saisir →' }}
-                      </a>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        }
-      </div>
-    </div>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </app-card>
   }
 </div>
