@@ -5,11 +5,12 @@ import { TournamentService } from '../../../core/services/tournament.service';
 import { MatchService } from '../../../core/services/match.service';
 import { CoachResultService } from '../../../core/services/coach-result.service';
 import { Match } from '../../../core/models/match.models';
+import { Card } from '../../../shared/card/card';
 import { CoachResult, CoachResultCreate, MatchResultCreate } from '../../../core/models/coachresult.models';
 
 @Component({
   selector: 'app-admin-match-result',
-  imports: [FormsModule],
+  imports: [FormsModule, Card],
   templateUrl: './admin-match-result.html',
   styleUrl: './admin-match-result.css',
 })
