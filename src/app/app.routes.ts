@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guards/auth-guard';
-import { adminGuard } from './guards/admin-guard';
+import { authGuard } from './core/guards/auth-guard';
+import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
   {
@@ -30,21 +30,21 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./admin/admin-dashboard/admin-dashboard').then((c) => c.AdminDashboard),
+          import('./pages/admin/admin-dashboard/admin-dashboard').then((c) => c.AdminDashboard),
       },
       {
         path: 'users',
-        loadComponent: () => import('./admin/admin-users/admin-users').then((c) => c.AdminUsers),
+        loadComponent: () => import('./pages/admin/admin-users/admin-users').then((c) => c.AdminUsers),
       },
       {
         path: 'tournament/new',
         loadComponent: () =>
-          import('./admin/admin-tournament/admin-tournament').then((c) => c.AdminTournament),
+          import('./pages/admin/admin-tournament/admin-tournament').then((c) => c.AdminTournament),
       },
       {
         path: 'tournament/:id',
         loadComponent: () =>
-          import('./admin/admin-tournament/admin-tournament').then((c) => c.AdminTournament),
+          import('./pages/admin/admin-tournament/admin-tournament').then((c) => c.AdminTournament),
       },
       {
         path: 'tournament',
@@ -53,34 +53,34 @@ export const routes: Routes = [
       },
       {
         path: 'rules/:tournamentId',
-        loadComponent: () => import('./admin/admin-rules/admin-rules').then((c) => c.AdminRules),
+        loadComponent: () => import('./pages/admin/admin-rules/admin-rules').then((c) => c.AdminRules),
       },
       {
         path: 'inscriptions/:tournamentId',
         loadComponent: () =>
-          import('./admin/admin-inscriptions/admin-inscriptions').then((c) => c.AdminInscriptions),
+          import('./pages/admin/admin-inscriptions/admin-inscriptions').then((c) => c.AdminInscriptions),
       },
       {
         path: 'menus/:tournamentId',
-        loadComponent: () => import('./admin/admin-menus/admin-menus').then((c) => c.AdminMenus),
+        loadComponent: () => import('./pages/admin/admin-menus/admin-menus').then((c) => c.AdminMenus),
       },
       {
         path: 'meals/:tournamentId',
-        loadComponent: () => import('./admin/admin-meals/admin-meals').then((c) => c.AdminMeals),
+        loadComponent: () => import('./pages/admin/admin-meals/admin-meals').then((c) => c.AdminMeals),
       },
       {
         path: 'rounds/:tournamentId',
-        loadComponent: () => import('./admin/admin-rounds/admin-rounds').then((c) => c.AdminRounds),
+        loadComponent: () => import('./pages/admin/admin-rounds/admin-rounds').then((c) => c.AdminRounds),
       },
       {
         path: 'rounds/:tournamentId/detail/:roundId',
         loadComponent: () =>
-          import('./admin/admin-round-detail/admin-round-detail').then((c) => c.AdminRoundDetail),
+          import('./pages/admin/admin-round-detail/admin-round-detail').then((c) => c.AdminRoundDetail),
       },
       {
         path: 'rounds/:tournamentId/matches/:matchId',
         loadComponent: () =>
-          import('./admin/admin-match-result/admin-match-result').then((c) => c.AdminMatchResult),
+          import('./pages/admin/admin-match-result/admin-match-result').then((c) => c.AdminMatchResult),
       },
       {
         path: '',

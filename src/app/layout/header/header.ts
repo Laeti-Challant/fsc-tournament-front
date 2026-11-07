@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { ModalService } from '../../services/modal.service';
+import { AuthService } from '../../core/services/auth.service';
+import { ModalService } from '../../core/services/modal.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Login } from '../../auth/login/login';
 import { Register } from '../../auth/register/register';

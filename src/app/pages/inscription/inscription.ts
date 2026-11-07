@@ -1,12 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TournamentService } from '../../services/tournament.service';
-import { CoachService } from '../../services/coach.service';
-import { RulesService } from '../../services/rules.service';
+import { TournamentService } from '../../core/services/tournament.service';
+import { CoachService } from '../../core/services/coach.service';
+import { RulesService } from '../../core/services/rules.service';
 import { Router } from '@angular/router';
-import { TournamentDetail } from '../../models/tournament.models';
-import { RosterCategory } from '../../models/rules.models';
-import { CoachCreate, CoachUpdate } from '../../models/coach.models';
+import { TournamentDetail } from '../../core/models/tournament.models';
+import { RosterCategory } from '../../core/models/rules.models';
+import { CoachCreate, CoachUpdate } from '../../core/models/coach.models';
 
 @Component({
   selector: 'app-inscription',

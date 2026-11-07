@@ -1,8 +1,8 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { CoachService } from '../../services/coach.service';
-import { TournamentService } from '../../services/tournament.service';
-import { TournamentDetail } from '../../models/tournament.models';
-import { CoachParticipant } from '../../models/coach.models';
+import { CoachService } from '../../core/services/coach.service';
+import { TournamentService } from '../../core/services/tournament.service';
+import { TournamentDetail } from '../../core/models/tournament.models';
+import { CoachParticipant } from '../../core/models/coach.models';
 
 @Component({
   selector: 'app-participants',

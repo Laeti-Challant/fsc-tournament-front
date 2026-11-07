@@ -1,17 +1,17 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../core/services/user.service';
 import {
   UserDTO,
   UserUpdateEmailDTO,
   UserUpdatePasswordDTO,
   UserUpdatePseudoDTO,
-} from '../../models/user.models';
+} from '../../core/models/user.models';
 import { RouterLink } from '@angular/router';
-import { CoachService } from '../../services/coach.service';
-import { TournamentService } from '../../services/tournament.service';
-import { TournamentDetail } from '../../models/tournament.models';
-import { CoachDetail } from '../../models/coach.models';
+import { CoachService } from '../../core/services/coach.service';
+import { TournamentService } from '../../core/services/tournament.service';
+import { TournamentDetail } from '../../core/models/tournament.models';
+import { CoachDetail } from '../../core/models/coach.models';
 
 @Component({
   selector: 'app-profil',
