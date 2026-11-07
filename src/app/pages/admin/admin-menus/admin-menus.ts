@@ -5,10 +5,11 @@ import { MenuService } from '../../../core/services/menu.service';
 import { TournamentService } from '../../../core/services/tournament.service';
 import { TournamentDetail } from '../../../core/models/tournament.models';
 import { Menu, MenuCreateUpdate } from '../../../core/models/menu.models';
+import { Card } from '../../../shared/card/card';
 
 @Component({
   selector: 'app-admin-menus',
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, Card],
   templateUrl: './admin-menus.html',
   styleUrl: './admin-menus.css',
 })
