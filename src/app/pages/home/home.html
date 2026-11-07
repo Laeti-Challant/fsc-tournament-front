@@ -86,12 +86,10 @@
       <h2 class="title-section text-center uppercase tracking-wide mb-8">Rules Set</h2>
 
       @if (rules()!.notesText) {
-        <div class="card bg-base-200 shadow mb-6">
-          <div class="card-body">
-            <h3 class="title-card text-primary">Règles de base</h3>
-            <p class="whitespace-pre-line text-sm leading-relaxed">{{ rules()!.notesText }}</p>
-          </div>
-        </div>
+        <app-card variant="plain" class="mb-6">
+          <h3 class="title-card text-primary">Règles de base</h3>
+          <p class="whitespace-pre-line text-sm leading-relaxed">{{ rules()!.notesText }}</p>
+        </app-card>
       }
 
       @if (rules()!.rosterText) {

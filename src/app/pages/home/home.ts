@@ -11,10 +11,11 @@ import { CoachService } from '../../core/services/coach.service';
 import { CoachParticipant } from '../../core/models/coach.models';
 import { MenuService } from '../../core/services/menu.service';
 import { Menu } from '../../core/models/menu.models';
+import { Card } from '../../shared/card/card';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, DecimalPipe, DatePipe],
+  imports: [RouterLink, DecimalPipe, DatePipe, Card],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
