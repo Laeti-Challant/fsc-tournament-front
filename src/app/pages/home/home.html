@@ -203,18 +203,16 @@
     } @else {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @for (menu of menus(); track menu.id) {
-          <div class="card bg-base-200 shadow">
-            <div class="card-body items-center text-center">
-              <h3 class="title-card text-sm font-semibold text-primary">{{ menu.label }}</h3>
-              @if (menu.description) {
-                <p class="whitespace-pre-line text-sm text-base-content/70 leading-relaxed">
-                  {{ menu.description }}
-                </p>
-              } @else {
-                <p class="text-base-content/40 text-xs italic">Détails à venir</p>
-              }
-            </div>
-          </div>
+          <app-card variant="plain" class="text-center">
+            <h3 class="title-card text-sm font-semibold text-primary">{{ menu.label }}</h3>
+            @if (menu.description) {
+              <p class="whitespace-pre-line text-sm text-base-content/70 leading-relaxed">
+                {{ menu.description }}
+              </p>
+            } @else {
+              <p class="text-base-content/40 text-xs italic">Détails à venir</p>
+            }
+          </app-card>
         }
       </div>
     }
