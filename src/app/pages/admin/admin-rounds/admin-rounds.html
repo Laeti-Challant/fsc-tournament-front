@@ -25,8 +25,8 @@
   } @else {
     <!-- Aucun round généré -->
     @if (rounds().length === 0) {
-      <div class="card bg-base-200 shadow-fsc">
-        <div class="card-body items-center text-center py-12">
+      <app-card class="text-center">
+        <div class="flex flex-col items-center py-12">
           <span class="text-5xl mb-4">⚔️</span>
           <h2 class="title-card mb-2">Aucun round généré</h2>
           <p class="text-neutral-content mb-6">
@@ -41,7 +41,7 @@
             }
           </button>
         </div>
-      </div>
+      </app-card>
 
       <!-- Liste des rounds -->
     } @else {

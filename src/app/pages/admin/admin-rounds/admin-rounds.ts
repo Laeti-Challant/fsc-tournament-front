@@ -3,10 +3,11 @@ import { TournamentService } from '../../../core/services/tournament.service';
 import { RoundService } from '../../../core/services/round.service';
 import { Round } from '../../../core/models/round.models';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Card } from '../../../shared/card/card';
 
 @Component({
   selector: 'app-admin-rounds',
-  imports: [RouterLink],
+  imports: [RouterLink, Card],
   templateUrl: './admin-rounds.html',
   styleUrl: './admin-rounds.css',
 })
