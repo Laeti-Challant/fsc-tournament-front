@@ -3,10 +3,11 @@ import { TournamentDetail } from '../../../core/models/tournament.models';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TournamentService } from '../../../core/services/tournament.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Card } from '../../../shared/card/card';
 
 @Component({
   selector: 'app-admin-tournament',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Card],
   templateUrl: './admin-tournament.html',
   styleUrl: './admin-tournament.css',
 })
