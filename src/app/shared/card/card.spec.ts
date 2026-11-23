@@ -50,4 +50,28 @@ describe('Card', () => {
     const content = hostFixture.nativeElement.querySelector('.card-body .projected');
     expect(content.textContent).toContain('Contenu de test');
   });
+
+  it('should have no hover border by default', () => {
+    fixture.detectChanges();
+
+    const card = fixture.nativeElement.querySelector('.card');
+    expect(card.classList).not.toContain('group-hover:border');
+  });
+
+  it('should show a primary border on hover when hover is primary', () => {
+    fixture.componentRef.setInput('hover', 'primary');
+    fixture.detectChanges();
+
+    const card = fixture.nativeElement.querySelector('.card');
+    expect(card.classList).toContain('group-hover:border');
+    expect(card.classList).toContain('group-hover:border-primary');
+  });
+
+  it('should show a success border on hover when hover is success', () => {
+    fixture.componentRef.setInput('hover', 'success');
+    fixture.detectChanges();
+
+    const card = fixture.nativeElement.querySelector('.card');
+    expect(card.classList).toContain('group-hover:border-success');
+  });
 });

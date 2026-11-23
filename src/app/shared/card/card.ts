@@ -9,4 +9,5 @@ import { Component, input } from '@angular/core';
 })
 export class Card {
   variant = input<'fsc' | 'plain'>('fsc');
+  hover = input<'primary' | 'success' | null>(null);
 }
