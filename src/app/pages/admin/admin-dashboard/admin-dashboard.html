@@ -64,11 +64,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <!-- Modifier le tournoi -->
 
-      <a
-        [routerLink]="['/admin/tournament', tournament()?.id]"
-        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-      >
-        <div class="card-body">
+      <a [routerLink]="['/admin/tournament', tournament()?.id]" class="group">
+        <app-card hover="primary" class="h-full">
           <div class="flex items-center justify-between mb-2">
             <h2 class="card-title text-lg">Événement</h2>
             <span class="text-3xl">🏆</span>
@@ -77,16 +74,13 @@
           <div class="card-actions justify-end mt-4">
             <span class="text-primary text-sm">Modifier →</span>
           </div>
-        </div>
+        </app-card>
       </a>
 
       <!-- Inscriptions -->
 
-      <a
-        [routerLink]="['/admin/inscriptions', tournament()?.id]"
-        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-      >
-        <div class="card-body">
+      <a [routerLink]="['/admin/inscriptions', tournament()?.id]" class="group">
+        <app-card hover="primary" class="h-full">
           <div class="flex items-center justify-between mb-2">
             <h2 class="card-title text-lg">Inscriptions</h2>
             <span class="text-3xl">📋</span>
@@ -95,8 +89,8 @@
             <span class="loading loading-spinner loading-sm text-primary"></span>
           } @else {
             <div class="flex gap-4 items-baseline">
-              <p class="text-4xl font-bold text-primary">{{ validatedCount() }}</p>
-              <p class="text-neutral-content text-sm">validés</p>
+              <p class="grow-0 text-4xl font-bold text-primary">{{ validatedCount() }}</p>
+              <p class="grow-0 text-neutral-content text-sm">validés</p>
             </div>
             @if (pendingCount() > 0) {
               <div class="mt-1">
@@ -107,16 +101,13 @@
           <div class="card-actions justify-end mt-4">
             <span class="text-primary text-sm">Gérer →</span>
           </div>
-        </div>
+        </app-card>
       </a>
 
       <!-- Repas -->
 
-      <a
-        [routerLink]="['/admin/meals', tournament()?.id]"
-        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-      >
-        <div class="card-body">
+      <a [routerLink]="['/admin/meals', tournament()?.id]" class="group">
+        <app-card hover="primary" class="h-full">
           <div class="flex items-center justify-between mb-2">
             <h2 class="card-title text-lg">Repas</h2>
             <span class="text-3xl">🍽️</span>
@@ -132,16 +123,13 @@
           <div class="card-actions justify-end mt-4">
             <span class="text-primary text-sm">Gérer →</span>
           </div>
-        </div>
+        </app-card>
       </a>
 
       <!-- Rounds -->
 
-      <a
-        [routerLink]="['/admin/rounds', tournament()?.id]"
-        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-      >
-        <div class="card-body">
+      <a [routerLink]="['/admin/rounds', tournament()?.id]" class="group">
+        <app-card hover="primary" class="h-full">
           <div class="flex items-center justify-between mb-2">
             <h2 class="card-title text-lg">Rounds</h2>
             <span class="text-3xl">⚔️</span>
@@ -150,16 +138,13 @@
           <div class="card-actions justify-end mt-4">
             <span class="text-primary text-sm">Gérer →</span>
           </div>
-        </div>
+        </app-card>
       </a>
 
       <!-- Règles -->
 
-      <a
-        [routerLink]="['/admin/rules', tournament()?.id]"
-        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-      >
-        <div class="card-body">
+      <a [routerLink]="['/admin/rules', tournament()?.id]" class="group">
+        <app-card hover="primary" class="h-full">
           <div class="flex items-center justify-between mb-2">
             <h2 class="card-title text-lg">Règles</h2>
             <span class="text-3xl">📖</span>
@@ -168,16 +153,13 @@
           <div class="card-actions justify-end mt-4">
             <span class="text-primary text-sm">Gérer →</span>
           </div>
-        </div>
+        </app-card>
       </a>
 
       <!-- Menus -->
 
-      <a
-        [routerLink]="['/admin/menus', tournament()?.id]"
-        class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-      >
-        <div class="card-body">
+      <a [routerLink]="['/admin/menus', tournament()?.id]" class="group">
+        <app-card hover="primary" class="h-full">
           <div class="flex items-center justify-between mb-2">
             <h2 class="card-title text-lg">Menus</h2>
             <span class="text-3xl">📝</span>
@@ -186,7 +168,7 @@
           <div class="card-actions justify-end mt-4">
             <span class="text-primary text-sm">Gérer →</span>
           </div>
-        </div>
+        </app-card>
       </a>
     </div>
   } @else {
