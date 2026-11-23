@@ -5,11 +5,8 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
     <!-- Carte Utilisateurs -->
 
-    <a
-      routerLink="/admin/users"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-primary transition-all cursor-pointer"
-    >
-      <div class="card-body">
+    <a routerLink="/admin/users" class="group">
+      <app-card hover="primary" class="h-full">
         <div class="flex items-center justify-between mb-2">
           <h2 class="card-title text-lg">Utilisateurs</h2>
           <span class="text-3xl">👥</span>
@@ -25,20 +22,19 @@
         <div class="card-actions justify-end mt-4">
           <span class="text-primary text-sm">Gérer →</span>
         </div>
-      </div>
+      </app-card>
     </a>
 
     <!-- Bouton créer un tournoi -->
 
-    <a
-      routerLink="/admin/tournament/new"
-      class="card bg-base-200 shadow-fsc hover:border hover:border-success transition-all cursor-pointer"
-    >
-      <div class="card-body items-center justify-center text-center">
-        <span class="text-4xl mb-2">➕</span>
-        <h2 class="card-title text-lg">Créer un tournoi</h2>
-        <p class="text-neutral-content text-sm">Organiser un nouvel événement</p>
-      </div>
+    <a routerLink="/admin/tournament/new" class="group">
+      <app-card hover="success" class="h-full">
+        <div class="my-auto flex flex-col items-center gap-2 text-center">
+          <span class="text-4xl">➕</span>
+          <h2 class="card-title text-lg">Créer un tournoi</h2>
+          <p class="text-neutral-content text-sm">Organiser un nouvel événement</p>
+        </div>
+      </app-card>
     </a>
   </div>
 
