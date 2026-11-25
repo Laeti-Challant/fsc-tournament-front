@@ -26,9 +26,7 @@
   </div>
 
   @if (loading()) {
-    <div class="flex justify-center py-12">
-      <span class="loading loading-spinner loading-lg text-primary"></span>
-    </div>
+    <app-loader />
   } @else if (error()) {
     <div class="alert alert-error max-w-md mx-auto">
       <span>{{ error() }}</span>
@@ -75,13 +73,9 @@
     </div>
 
     @if (filteredCoaches().length === 0) {
-      <p class="text-center text-base-content/40 italic py-12">
-        Aucune inscription
-        @if (activeFilter() !== 'ALL') {
-          avec ce filtre
-        }
-        .
-      </p>
+      <app-empty-state>
+        Aucune inscription{{ activeFilter() !== 'ALL' ? ' avec ce filtre' : '' }}.
+      </app-empty-state>
     } @else {
       <!-- Tableau desktop -->
       <div class="hidden md:block overflow-x-auto rounded-[16px]">

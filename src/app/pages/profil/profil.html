@@ -10,10 +10,10 @@
 
   @if (user()) {
     <!-- Infos générales -->
-    <div class="card bg-base-200 mb-6 p-4 shadow-fsc">
+    <app-card class="mb-6">
       <p><span class="font-semibold">Rôle :</span> {{ user()!.role }}</p>
       <p><span class="font-semibold">Compte actif :</span> {{ user()!.active ? 'Oui' : 'Non' }}</p>
-    </div>
+    </app-card>
 
     <!-- Modifier le pseudo -->
     <div tabindex="0" class="collapse collapse-arrow bg-base-200 shadow-fsc mb-4 p-4">
@@ -73,7 +73,7 @@
     @if (coach()) {
       <div class="divider mt-8 mb-4">Mon inscription</div>
 
-      <div class="card bg-base-200 p-6 shadow-fsc mb-4">
+      <app-card class="mb-4">
         <h2 class="subtitle-card mb-4">{{ tournament()!.name }}</h2>
 
         <div class="grid grid-cols-2 gap-y-3 gap-x-4">
@@ -142,14 +142,14 @@
             Modifier mon inscription
           </a>
         }
-      </div>
+      </app-card>
     } @else if (tournament() && tournament()!.status === 'PLANNED') {
       <div class="divider mt-8 mb-4">Tournoi</div>
 
-      <div class="card bg-base-200 p-6 shadow-fsc mb-4 text-center">
+      <app-card class="mb-4 text-center">
         <p class="mb-4">Vous n'êtes pas encore inscrit au {{ tournament()!.name }}.</p>
         <a routerLink="/inscription" class="btn btn-primary">S'inscrire</a>
-      </div>
+      </app-card>
     }
   }
 </div>

@@ -4,10 +4,12 @@ import { TournamentService } from '../../../core/services/tournament.service';
 import { TournamentDetail } from '../../../core/models/tournament.models';
 import { CoachSummary } from '../../../core/models/coach.models';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Loader } from '../../../shared/loader/loader';
+import { EmptyState } from '../../../shared/empty-state/empty-state';
 
 @Component({
   selector: 'app-admin-inscriptions',
-  imports: [RouterLink],
+  imports: [RouterLink, Loader, EmptyState],
   templateUrl: './admin-inscriptions.html',
   styleUrl: './admin-inscriptions.css',
 })

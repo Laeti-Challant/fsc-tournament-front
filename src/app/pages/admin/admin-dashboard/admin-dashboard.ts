@@ -4,10 +4,11 @@ import { UserService } from '../../../core/services/user.service';
 import { TournamentService } from '../../../core/services/tournament.service';
 import { CoachService } from '../../../core/services/coach.service';
 import { TournamentDetail } from '../../../core/models/tournament.models';
+import { Card } from '../../../shared/card/card';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [RouterLink],
+  imports: [RouterLink, Card],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css',
 })

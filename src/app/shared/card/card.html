@@ -1,0 +1,13 @@
+<div
+  class="card bg-base-200 h-full"
+  [class.shadow-fsc]="variant() === 'fsc'"
+  [class.shadow]="variant() === 'plain'"
+  [class.transition-all]="hover() !== null"
+  [class.group-hover:border]="hover() !== null"
+  [class.group-hover:border-primary]="hover() === 'primary'"
+  [class.group-hover:border-success]="hover() === 'success'"
+>
+  <div class="card-body">
+    <ng-content />
+  </div>
+</div>

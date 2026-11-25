@@ -9,21 +9,19 @@
   }
 
   @if (loading()) {
-    <div class="flex justify-center py-8">
-      <span class="loading loading-spinner loading-lg"></span>
-    </div>
+    <app-loader />
   } @else if (registrationClosed()) {
-    <div class="card bg-base-200 p-6 shadow-fsc text-center">
+    <app-card class="text-center">
       <p class="text-lg">Les inscriptions sont fermées pour ce tournoi.</p>
-    </div>
+    </app-card>
   } @else if (tournament()) {
-    <div class="card bg-base-200 p-6 shadow-fsc mb-6">
+    <app-card class="mb-6">
       <h2 class="subtitle-card mb-2">{{ tournament()!.name }}</h2>
       <p>Date : {{ tournament()!.eventDate }}</p>
       <p>Places : {{ tournament()!.maxParticipants }} max</p>
-    </div>
+    </app-card>
 
-    <div class="card bg-base-200 p-6 shadow-fsc">
+    <app-card>
       @if (editMode()) {
         <h2 class="subtitle-card mb-4">Modifier mon inscription</h2>
       }
@@ -114,6 +112,6 @@
           S'inscrire
         </button>
       }
-    </div>
+    </app-card>
   }
 </div>

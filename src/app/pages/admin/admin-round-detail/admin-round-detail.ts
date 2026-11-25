@@ -8,10 +8,12 @@ import { Round, RoundStatus } from '../../../core/models/round.models';
 import { Match, MatchCreate } from '../../../core/models/match.models';
 import { CoachParticipant } from '../../../core/models/coach.models';
 import { FormsModule } from '@angular/forms';
+import { Card } from '../../../shared/card/card';
+import { Loader } from '../../../shared/loader/loader';
 
 @Component({
   selector: 'app-admin-round-detail',
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, Card, Loader],
   templateUrl: './admin-round-detail.html',
   styleUrl: './admin-round-detail.css',
 })

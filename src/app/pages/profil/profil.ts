@@ -12,10 +12,11 @@ import { CoachService } from '../../core/services/coach.service';
 import { TournamentService } from '../../core/services/tournament.service';
 import { TournamentDetail } from '../../core/models/tournament.models';
 import { CoachDetail } from '../../core/models/coach.models';
+import { Card } from '../../shared/card/card';
 
 @Component({
   selector: 'app-profil',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, Card],
   templateUrl: './profil.html',
   styleUrl: './profil.css',
 })
