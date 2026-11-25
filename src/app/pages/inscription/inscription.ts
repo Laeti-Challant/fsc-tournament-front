@@ -8,10 +8,11 @@ import { TournamentDetail } from '../../core/models/tournament.models';
 import { RosterCategory } from '../../core/models/rules.models';
 import { CoachCreate, CoachUpdate } from '../../core/models/coach.models';
 import { Card } from '../../shared/card/card';
+import { Loader } from '../../shared/loader/loader';
 
 @Component({
   selector: 'app-inscription',
-  imports: [FormsModule, Card],
+  imports: [FormsModule, Card, Loader],
   templateUrl: './inscription.html',
   styleUrl: './inscription.css',
 })

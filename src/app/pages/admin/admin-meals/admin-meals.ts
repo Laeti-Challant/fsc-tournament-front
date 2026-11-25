@@ -4,10 +4,11 @@ import { TournamentService } from '../../../core/services/tournament.service';
 import { TournamentDetail } from '../../../core/models/tournament.models';
 import { CoachMeal } from '../../../core/models/coach.models';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Loader } from '../../../shared/loader/loader';
 
 @Component({
   selector: 'app-admin-meals',
-  imports: [RouterLink],
+  imports: [RouterLink, Loader],
   templateUrl: './admin-meals.html',
   styleUrl: './admin-meals.css',
 })

@@ -3,10 +3,11 @@ import { CoachService } from '../../core/services/coach.service';
 import { TournamentService } from '../../core/services/tournament.service';
 import { TournamentDetail } from '../../core/models/tournament.models';
 import { CoachParticipant } from '../../core/models/coach.models';
+import { Loader } from '../../shared/loader/loader';
 
 @Component({
   selector: 'app-participants',
-  imports: [],
+  imports: [Loader],
   templateUrl: './participants.html',
   styleUrl: './participants.css',
 })
