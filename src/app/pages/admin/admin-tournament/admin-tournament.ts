@@ -4,10 +4,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TournamentService } from '../../../core/services/tournament.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Card } from '../../../shared/card/card';
+import { Loader } from '../../../shared/loader/loader';
 
 @Component({
   selector: 'app-admin-tournament',
-  imports: [ReactiveFormsModule, Card],
+  imports: [ReactiveFormsModule, Card, Loader],
   templateUrl: './admin-tournament.html',
   styleUrl: './admin-tournament.css',
 })

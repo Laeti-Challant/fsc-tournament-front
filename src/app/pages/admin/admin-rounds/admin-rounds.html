@@ -19,9 +19,7 @@
 
   <!-- Chargement -->
   @if (isLoading()) {
-    <div class="flex justify-center py-12">
-      <span class="loading loading-spinner loading-lg text-primary"></span>
-    </div>
+    <app-loader />
   } @else {
     <!-- Aucun round généré -->
     @if (rounds().length === 0) {

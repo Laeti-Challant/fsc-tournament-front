@@ -6,10 +6,11 @@ import { TournamentService } from '../../../core/services/tournament.service';
 import { TournamentDetail } from '../../../core/models/tournament.models';
 import { Menu, MenuCreateUpdate } from '../../../core/models/menu.models';
 import { Card } from '../../../shared/card/card';
+import { Loader } from '../../../shared/loader/loader';
 
 @Component({
   selector: 'app-admin-menus',
-  imports: [RouterLink, FormsModule, Card],
+  imports: [RouterLink, FormsModule, Card, Loader],
   templateUrl: './admin-menus.html',
   styleUrl: './admin-menus.css',
 })

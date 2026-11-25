@@ -6,10 +6,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentDetail } from '../../../core/models/tournament.models';
 import { TournamentRules } from '../../../core/models/rules.models';
 import { Card } from '../../../shared/card/card';
+import { Loader } from '../../../shared/loader/loader';
 
 @Component({
   selector: 'app-admin-rules',
-  imports: [ReactiveFormsModule, Card],
+  imports: [ReactiveFormsModule, Card, Loader],
   templateUrl: './admin-rules.html',
   styleUrl: './admin-rules.css',
 })

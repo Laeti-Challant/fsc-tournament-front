@@ -3,10 +3,11 @@ import { UserService } from '../../../core/services/user.service';
 import { Page, UserAdminUpdateDTO, UserDTO } from '../../../core/models/user.models';
 import { AuthService } from '../../../core/services/auth.service';
 import { RouterLink } from '@angular/router';
+import { Loader } from '../../../shared/loader/loader';
 
 @Component({
   selector: 'app-admin-users',
-  imports: [RouterLink],
+  imports: [RouterLink, Loader],
   templateUrl: './admin-users.html',
   styleUrl: './admin-users.css',
 })

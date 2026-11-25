@@ -7,10 +7,11 @@ import { CoachResultService } from '../../../core/services/coach-result.service'
 import { Match } from '../../../core/models/match.models';
 import { Card } from '../../../shared/card/card';
 import { CoachResult, CoachResultCreate, MatchResultCreate } from '../../../core/models/coachresult.models';
+import { Loader } from '../../../shared/loader/loader';
 
 @Component({
   selector: 'app-admin-match-result',
-  imports: [FormsModule, Card],
+  imports: [FormsModule, Card, Loader],
   templateUrl: './admin-match-result.html',
   styleUrl: './admin-match-result.css',
 })
