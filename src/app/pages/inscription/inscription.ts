@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
 import { TournamentDetail } from '../../core/models/tournament.models';
 import { RosterCategory } from '../../core/models/rules.models';
 import { CoachCreate, CoachUpdate } from '../../core/models/coach.models';
+import { Card } from '../../shared/card/card';
 
 @Component({
   selector: 'app-inscription',
-  imports: [FormsModule],
+  imports: [FormsModule, Card],
   templateUrl: './inscription.html',
   styleUrl: './inscription.css',
 })
