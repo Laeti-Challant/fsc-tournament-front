@@ -74,11 +74,7 @@
 
     @if (filteredCoaches().length === 0) {
       <app-empty-state>
-        Aucune inscription
-        @if (activeFilter() !== 'ALL') {
-          avec ce filtre
-        }
-        .
+        Aucune inscription{{ activeFilter() !== 'ALL' ? ' avec ce filtre' : '' }}.
       </app-empty-state>
     } @else {
       <!-- Tableau desktop -->
