@@ -21,7 +21,7 @@
       <p>Places : {{ tournament()!.maxParticipants }} max</p>
     </app-card>
 
-    <div class="card bg-base-200 p-6 shadow-fsc">
+    <app-card>
       @if (editMode()) {
         <h2 class="subtitle-card mb-4">Modifier mon inscription</h2>
       }
@@ -112,6 +112,6 @@
           S'inscrire
         </button>
       }
-    </div>
+    </app-card>
   }
 </div>
