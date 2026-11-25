@@ -197,7 +197,7 @@
     <h2 class="title-section text-center uppercase tracking-wide mb-8">Menu</h2>
 
     @if (menus().length === 0) {
-      <p class="text-center text-base-content/40 italic">Menu à venir</p>
+      <app-empty-state>Menu à venir</app-empty-state>
     } @else {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @for (menu of menus(); track menu.id) {
@@ -224,7 +224,7 @@
       </h2>
 
       @if (latestParticipants().length === 0) {
-        <p class="text-center text-base-content/40 italic">Aucun participant pour le moment.</p>
+        <app-empty-state>Aucun participant pour le moment.</app-empty-state>
       } @else {
         <div class="grid grid-cols-1 gap-2 max-w-md mx-auto mb-8">
           @for (coach of latestParticipants(); track coach.id) {

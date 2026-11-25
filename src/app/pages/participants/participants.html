@@ -27,9 +27,9 @@
     }
 
     @if (sortedParticipants().length === 0) {
-      <div class="text-center text-base-content/40 italic py-12">
+      <app-empty-state>
         Aucun participant inscrit pour le moment.
-      </div>
+      </app-empty-state>
     } @else {
       <!-- TABLE DESKTOP -->
       <div class="hidden md:block overflow-x-auto">

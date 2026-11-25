@@ -13,10 +13,11 @@ import { MenuService } from '../../core/services/menu.service';
 import { Menu } from '../../core/models/menu.models';
 import { Card } from '../../shared/card/card';
 import { Loader } from '../../shared/loader/loader';
+import { EmptyState } from '../../shared/empty-state/empty-state';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, DecimalPipe, DatePipe, Card, Loader],
+  imports: [RouterLink, DecimalPipe, DatePipe, Card, Loader, EmptyState],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

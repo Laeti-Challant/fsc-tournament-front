@@ -58,9 +58,9 @@
     </div>
 
     @if (meals().length === 0) {
-      <div class="text-center text-base-content/40 italic py-12">
+      <app-empty-state>
         Aucun participant ne mange sur place pour le moment.
-      </div>
+      </app-empty-state>
     } @else {
       <!-- TABLE -->
       <div class="overflow-x-auto">

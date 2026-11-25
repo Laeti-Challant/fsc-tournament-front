@@ -73,13 +73,13 @@
     </div>
 
     @if (filteredCoaches().length === 0) {
-      <p class="text-center text-base-content/40 italic py-12">
+      <app-empty-state>
         Aucune inscription
         @if (activeFilter() !== 'ALL') {
           avec ce filtre
         }
         .
-      </p>
+      </app-empty-state>
     } @else {
       <!-- Tableau desktop -->
       <div class="hidden md:block overflow-x-auto rounded-[16px]">

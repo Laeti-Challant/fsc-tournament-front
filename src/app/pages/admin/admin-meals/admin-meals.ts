@@ -5,10 +5,11 @@ import { TournamentDetail } from '../../../core/models/tournament.models';
 import { CoachMeal } from '../../../core/models/coach.models';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Loader } from '../../../shared/loader/loader';
+import { EmptyState } from '../../../shared/empty-state/empty-state';
 
 @Component({
   selector: 'app-admin-meals',
-  imports: [RouterLink, Loader],
+  imports: [RouterLink, Loader, EmptyState],
   templateUrl: './admin-meals.html',
   styleUrl: './admin-meals.css',
 })

@@ -70,9 +70,9 @@
 
     <!-- LISTE DES MENUS -->
     @if (menus().length === 0 && !showForm()) {
-      <p class="text-center text-base-content/40 italic py-12">
+      <app-empty-state>
         Aucun menu configuré pour ce tournoi.
-      </p>
+      </app-empty-state>
     } @else {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @for (menu of menus(); track menu.id) {
